@@ -13,9 +13,6 @@
 # limitations under the License.
 
 
-# Disable dex-preoptimization
-WITH_DEXPREOPT := false
-
 # Kernel headers
 PRODUCT_VENDOR_KERNEL_HEADERS := device/sony/tone-common/kernel-headers
 
