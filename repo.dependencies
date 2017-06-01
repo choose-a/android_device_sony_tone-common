@@ -1,0 +1,20 @@
+[
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_device_sony_common",
+    "target_path":  "device/sony/common",
+    "revision":     "choose-7.1"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_kernel_sony_msm8996",
+    "target_path":  "kernel/sony/msm8996",
+    "revision":     "choose-7.1"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_hardware_sony_camera-msm8996",
+    "target_path":  "hardware/sony/camera-msm8996",
+    "revision":     "choose-7.1"
+  }
+]
