@@ -18,6 +18,10 @@ PLATFORM_COMMON_PATH := device/sony/tone-common
 # Kernel source
 TARGET_KERNEL_SOURCE := kernel/sony/msm8996
 
+# Snapdragon Camera
+PRODUCT_PACKAGES += \
+    SnapdragonCamera
+
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += \
     $(PLATFORM_COMMON_PATH)/overlay
