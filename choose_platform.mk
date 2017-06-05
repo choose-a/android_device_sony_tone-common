@@ -18,9 +18,9 @@ PLATFORM_COMMON_PATH := device/sony/tone-common
 # Kernel source
 TARGET_KERNEL_SOURCE := kernel/sony/msm8996
 
-$(call inherit-product, $(PLATFORM_COMMON_PATH)/platform.mk)
-# $(call inherit-product, $(PLATFORM_COMMON_PATH)/twrp.mk)
-
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += \
     $(PLATFORM_COMMON_PATH)/overlay
+
+$(call inherit-product, $(PLATFORM_COMMON_PATH)/platform.mk)
+# $(call inherit-product, $(PLATFORM_COMMON_PATH)/twrp.mk)

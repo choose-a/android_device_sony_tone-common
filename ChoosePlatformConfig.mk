@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Platform path
+PLATFORM_COMMON_PATH := device/sony/tone-common
 
 # Kernel headers
-PRODUCT_VENDOR_KERNEL_HEADERS := device/sony/tone-common/kernel-headers
+PRODUCT_VENDOR_KERNEL_HEADERS := \
+    $(PLATFORM_COMMON_PATH)/kernel-headers
 
 # Upstream config
-include device/sony/tone-common/PlatformConfig.mk
+include $(PLATFORM_COMMON_PATH)/PlatformConfig.mk
