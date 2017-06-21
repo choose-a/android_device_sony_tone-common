@@ -19,5 +19,8 @@ PLATFORM_COMMON_PATH := device/sony/tone-common
 PRODUCT_VENDOR_KERNEL_HEADERS := \
     $(PLATFORM_COMMON_PATH)/kernel-headers
 
+# Camera uses media ext
+TARGET_USES_MEDIA_EXTENSIONS := true
+
 # Upstream config
 include $(PLATFORM_COMMON_PATH)/PlatformConfig.mk
