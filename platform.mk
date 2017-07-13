@@ -153,3 +153,4 @@ PRODUCT_PACKAGES += \
     SnapdragonCamera \
     SnapdragonGallery
 
+$(call inherit-product, $(PLATFORM_COMMON_PATH)/twrp/twrp.mk)
