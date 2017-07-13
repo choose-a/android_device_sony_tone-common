@@ -18,6 +18,7 @@ PLATFORM_COMMON_PATH := device/sony/tone-common
 $(call inherit-product, device/sony/common/choose_common.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
+$(call inherit-product, $(PLATFORM_COMMON_PATH)/twrp/twrp.mk)
 
 SOMC_PLATFORM := tone
 
@@ -152,4 +153,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     SnapdragonCamera \
     SnapdragonGallery
-
