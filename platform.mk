@@ -63,6 +63,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 # Platform Init
 PRODUCT_PACKAGES += \
     fstab.tone \
+    init.recovery.usb \
     init.tone.pwr
 
 # NFC packages
