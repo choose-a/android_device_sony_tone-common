@@ -63,6 +63,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 # Platform Init
 PRODUCT_PACKAGES += \
     fstab.tone \
+    init.recovery.usb \
     init.tone.pwr
 
 # NFC packages
@@ -153,3 +154,4 @@ PRODUCT_PACKAGES += \
     SnapdragonCamera \
     SnapdragonGallery
 
+$(call inherit-product, $(PLATFORM_COMMON_PATH)/twrp.mk)
