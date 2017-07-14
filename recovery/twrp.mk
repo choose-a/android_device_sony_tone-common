@@ -2,6 +2,8 @@
 # This is for TWRP Recovery
 #
 
+TONE_VENDOR := vendor/sony/tone-common/proprietary/vendor
+
 # user interface
 TW_THEME := portrait_hdpi
 TW_NO_SCREEN_BLANK := true
@@ -45,3 +47,17 @@ TW_CRYPTO_KEY_LOC := "footer"
 PRODUCT_PACKAGES += \
     twrp.fstab \
     init.recovery.usb
+
+# touch firmwares
+PRODUCT_COPY_FILES += \
+    $(TONE_VENDOR)/firmware/touch_module_id_0x90.img:recovery/root/vendor/firmware/touch_module_id_0x90.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0x91.img:recovery/root/vendor/firmware/touch_module_id_0x91.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0x92.img:recovery/root/vendor/firmware/touch_module_id_0x92.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0x93.img:recovery/root/vendor/firmware/touch_module_id_0x93.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0x94.img:recovery/root/vendor/firmware/touch_module_id_0x94.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xb0.img:recovery/root/vendor/firmware/touch_module_id_0xb0.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xb1.img:recovery/root/vendor/firmware/touch_module_id_0xb1.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xb2.img:recovery/root/vendor/firmware/touch_module_id_0xb2.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xba.img:recovery/root/vendor/firmware/touch_module_id_0xba.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xbb.img:recovery/root/vendor/firmware/touch_module_id_0xbb.img \
+    $(TONE_VENDOR)/firmware/touch_module_id_0xbc.img:recovery/root/vendor/firmware/touch_module_id_0xbc.img
