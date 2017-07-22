@@ -110,6 +110,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610
 
+# Audio
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.qc.sdk.audio.fluencetype=fluencepro
+
 # aDSP sensors
 ## max rate
 PRODUCT_PROPERTY_OVERRIDES += \
