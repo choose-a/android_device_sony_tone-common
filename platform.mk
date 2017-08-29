@@ -154,11 +154,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qti.sensors.iod=false \
     ro.qfusion_use_report_period=false
 
-# Snapdragon Packages
-PRODUCT_PACKAGES += \
-    SnapdragonCamera \
-    SnapdragonGallery
-
 # USB controller setup
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.usb.controller=6a00000.dwc3
