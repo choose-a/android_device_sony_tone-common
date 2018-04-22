@@ -997,7 +997,7 @@ service time_daemon /vendor/bin/time_daemon
     user root
     group root
 
-service tftp_server /vendor/bin/tftp_server
+service vendor.tftp_server /vendor/bin/tftp_server
     class core
     user root
 
