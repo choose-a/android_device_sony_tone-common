@@ -31,11 +31,6 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := kryo
 
-TARGET_USES_64_BIT_BINDER := true
-TARGET_USES_64_BIT_BCMDHD := true
-
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-
 BOARD_KERNEL_BASE        := 0x80000000
 BOARD_KERNEL_PAGESIZE    := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
@@ -55,9 +50,12 @@ WPA_SUPPLICANT_VERSION      := VER_0_8_X
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
 BOARD_HOSTAPD_DRIVER        := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_bcmdhd
+# define firmware paths if not using brcmfmac driver
+ifneq ($(WIFI_DRIVER_BUILT),brcmfmac)
 WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_AP      := "/vendor/firmware/fw_bcmdhd_apsta.bin"
 WIFI_DRIVER_FW_PATH_STA     := "/vendor/firmware/fw_bcmdhd.bin"
+endif
 
 # BT definitions for Broadcom solution
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(PLATFORM_COMMON_PATH)/bluetooth
@@ -69,14 +67,15 @@ BOARD_CUSTOM_BT_CONFIG := $(PLATFORM_COMMON_PATH)/bluetooth/vnd_generic.txt
 TARGET_PER_MGR_ENABLED := true
 
 # SELinux
-BOARD_SEPOLICY_DIRS += $(PLATFORM_COMMON_PATH)/sepolicy_platform
+BOARD_VENDOR_SEPOLICY_DIRS += $(PLATFORM_COMMON_PATH)/sepolicy_platform
 
-# FPC version select
-TARGET_FPC_VERSION := N
+# Display
+TARGET_USES_GRALLOC1 := true
+
+# Cache partition
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # Platform witout a vendor partition
 TARGET_COPY_OUT_VENDOR := system/vendor
-
-BOARD_ROOT_EXTRA_SYMLINKS := /system/vendor/lib/dsp:/dsp
 
 include device/sony/common/CommonConfig.mk

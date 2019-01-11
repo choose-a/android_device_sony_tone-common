@@ -38,7 +38,8 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_COPY_FILES += \
     $(SONY_ROOT)/vendor/etc/audio_tuning_mixer_tasha.txt:$(TARGET_COPY_OUT_VENDOR)/etc/audio_tuning_mixer_tasha.txt \
-    $(SONY_ROOT)/vendor/etc/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml
+    $(SONY_ROOT)/vendor/etc/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
+    $(SONY_ROOT)/vendor/etc/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -83,6 +84,12 @@ PRODUCT_PACKAGES += \
     gralloc.msm8996 \
     hwcomposer.msm8996 \
     memtrack.msm8996
+
+# BCM Bluetooth
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl \
+    android.hardware.bluetooth@1.0-service \
+    libbt-vendor
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -148,10 +155,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     sys.usb.rndis.func.name=rndis_bam
 
 # WiFi MAC address path
-ifneq ($(SOMC_KERNEL_VERSION),4.9)
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.wifi.addr_path=/sys/devices/soc/soc:bcmdhd_wlan/macaddr
-else
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.wifi.addr_path=/sys/devices/platform/soc/soc:bcmdhd_wlan/macaddr
-endif
+
+# setup dm-verity configs.
+PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/platform/soc/7464900.sdhci/by-name/system
+$(call inherit-product, build/target/product/verity.mk)
