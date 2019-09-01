@@ -1,40 +1,78 @@
 LOCAL_PATH := $(call my-dir)
 
+# Common config scripts
+
 include $(CLEAR_VARS)
-LOCAL_MODULE := fstab.$(TARGET_DEVICE)
-LOCAL_SRC_FILES := vendor/etc/fstab.tone
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_STEM := fstab.$(TARGET_DEVICE)
+LOCAL_MODULE       := init.qcom.post_boot.sh
+LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/etc
+LOCAL_SRC_FILES    := etc/init.qcom.post_boot.sh
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_EXECUTABLES)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := init.tone
-LOCAL_SRC_FILES := vendor/etc/init/init.tone.rc
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_STEM := init.tone
-LOCAL_MODULE_SUFFIX := .rc
+LOCAL_MODULE       := init.qcom.sensors.sh
+LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/etc/init
+LOCAL_SRC_FILES    := etc/init.qcom.sensors.sh
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_EXECUTABLES)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := init.tone.pwr
-LOCAL_SRC_FILES := vendor/etc/init/init.tone.pwr.rc
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_STEM := init.tone.pwr
-LOCAL_MODULE_SUFFIX := .rc
+LOCAL_MODULE       := init.qcom.sh
+LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/etc/init
+LOCAL_SRC_FILES    := etc/init.qcom.sh
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_EXECUTABLES)
+include $(BUILD_PREBUILT)
+
+# Common init scripts
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := fstab.qcom
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/fstab.qcom
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := ueventd
-LOCAL_SRC_FILES := vendor/ueventd.rc
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_STEM := ueventd
-LOCAL_MODULE_SUFFIX := .rc
+LOCAL_MODULE       := init.qcom.rc
+LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)
+LOCAL_SRC_FILES    := etc/init.qcom.rc
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/init/hw
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.qcom.usb.rc
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/init.qcom.usb.rc
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/init/hw
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.usb.rc
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/init.usb.rc
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/init/hw
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := init.recovery.qcom.rc
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/init.recovery.qcom.rc
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := ueventd.qcom.rc
+LOCAL_MODULE_STEM  := ueventd.rc
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/ueventd.qcom.rc
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)
 include $(BUILD_PREBUILT)

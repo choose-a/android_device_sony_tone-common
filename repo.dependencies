@@ -1,14 +1,38 @@
 [
   {
     "remote":       "choose-a",
-    "repository":   "choose-a/android_device_sony_common",
-    "target_path":  "device/sony/common",
+    "repository":   "choose-a/android_kernel_sony_msm8996",
+    "target_path":  "kernel/sony/msm8996",
+    "revision":     "choose-9.0"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_hardware_qcom_audio_msm8996-caf",
+    "target_path":  "hardware/qcom/audio-msm8996-caf",
+    "revision":     "choose-9.0"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_hardware_qcom_display_msm8996-caf",
+    "target_path":  "hardware/qcom/display-msm8996-caf",
+    "revision":     "choose-9.0"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_hardware_qcom_media_msm8996-caf",
+    "target_path":  "hardware/qcom/media-msm8996-caf",
     "revision":     "choose-9.0"
   },
   {
     "remote":       "choose-a",
     "repository":   "choose-a/android_packages_apps_SnapdragonCamera",
     "target_path":  "packages/apps/SnapdragonCamera",
+    "revision":     "choose-9.0"
+  },
+  {
+    "remote":       "choose-a",
+    "repository":   "choose-a/android_hardware_sony_simdetect",
+    "target_path":  "hardware/sony/simdetect",
     "revision":     "choose-9.0"
   }
 ]
