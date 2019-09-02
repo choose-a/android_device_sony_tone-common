@@ -43,6 +43,9 @@ TARGET_2ND_CPU_VARIANT := kryo
 # Kernel
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom ehci-hcd.park=3 lpm_levels.sleep_disabled=1 sched_enable_hmp=1 sched_enable_power_aware=1 service_locator.enable=1 swiotlb=1 androidboot.configfs=true
+ifneq ($(BOARD_USE_ENFORCING_SELINUX),true)
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+endif
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_KERNEL_CROSS_COMPILE_32BITS_PREFIX := arm-linux-androideabi-
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
