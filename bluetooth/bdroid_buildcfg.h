@@ -30,10 +30,10 @@ static inline const char* BtmGetDefaultName()
     char product_device[PROPERTY_VALUE_MAX];
     property_get("ro.product.device", product_device, "");
 
-    if (strstr(product_device, "discovery"))
-        return "Sony Xperia XA2 Ultra";
-    if (strstr(product_device, "pioneer"))
-        return "Sony Xperia XA2";
+    if (strstr(product_device, "kagura"))
+        return "Sony Xperia XZ";
+    if (strstr(product_device, "kagura"))
+        return "Sony Xperia XZ Dual Sim";
 
     // Fallback to ro.product.model
     return "";
