@@ -380,4 +380,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/updater.sh:utilities/updater.sh \
     $(LOCAL_COMMON_PATH)/releasetools/README:utilities/README
 
+# Variant
+PRODUCT_PACKAGES += \
+    libinit_variant
+
 $(call inherit-product, device/sony/tone-common/recovery/twrp.mk)
