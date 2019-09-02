@@ -175,6 +175,10 @@ BOARD_ROOT_EXTRA_FOLDERS := bt_firmware dsp firmware idd persist rca
 #Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := $(VENDOR_PATH)/releasetools
 
+#Init
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_variant
+
 # Security patch level
 VENDOR_SECURITY_PATCH := 2018-12-01
 
