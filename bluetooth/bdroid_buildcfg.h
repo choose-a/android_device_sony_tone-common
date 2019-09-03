@@ -32,7 +32,7 @@ static inline const char* BtmGetDefaultName()
 
     if (strstr(product_device, "kagura"))
         return "Sony Xperia XZ";
-    if (strstr(product_device, "kagura"))
+    if (strstr(product_device, "kagura_ds"))
         return "Sony Xperia XZ Dual Sim";
 
     // Fallback to ro.product.model

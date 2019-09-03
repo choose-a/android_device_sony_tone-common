@@ -16,9 +16,9 @@
 
 BOARD_VENDOR := sony
 
-VENDOR_PATH := device/sony/tone-common
+COMMON_PATH := device/sony/tone-common
 
-TARGET_SPECIFIC_HEADER_PATH := $(VENDOR_PATH)/include
+TARGET_SPECIFIC_HEADER_PATH := $(COMMON_PATH)/include
 # Platform
 TARGET_BOARD_PLATFORM := msm8996
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno530
@@ -98,7 +98,7 @@ USE_XML_AUDIO_POLICY_CONF := 1
 TARGET_USES_QCOM_MM_AUDIO := true
 
 # Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(VENDOR_PATH)/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth
 BOARD_HAS_QCA_BT_ROME := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_BTNV := true
@@ -139,16 +139,14 @@ VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := $(VENDOR_PATH)/config.fs
+TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
 
 # HIDL
-DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
-DEVICE_MATRIX_FILE := $(VENDOR_PATH)/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
-BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
-TARGET_COPY_OUT_VENDOR := system/vendor
 TARGET_USES_MKE2FS := true
 
 # Power
@@ -159,7 +157,7 @@ BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
 TARGET_NO_RECOVERY ?= false
-TARGET_RECOVERY_FSTAB ?= $(VENDOR_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB ?= $(COMMON_PATH)/rootdir/etc/fstab.qcom
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # RIL
@@ -171,7 +169,7 @@ TARGET_USES_OLD_MNC_FORMAT := true
 BOARD_ROOT_EXTRA_FOLDERS := bt_firmware dsp firmware idd persist rca
 
 #Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := $(VENDOR_PATH)/releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)/releasetools
 
 # Security patch level
 VENDOR_SECURITY_PATCH := 2018-12-01
@@ -179,7 +177,7 @@ VENDOR_SECURITY_PATCH := 2018-12-01
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy/vendor
+BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 
 # Variant
 TARGET_INIT_VENDOR_LIB := libinit_variant
@@ -202,6 +200,3 @@ WIFI_DRIVER_STATE_ON := 1
 WIFI_DRIVER_STATE_OFF := 0
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
-
-# Inherit from the proprietary version
--include vendor/sony/tone-common/BoardConfigVendor.mk
