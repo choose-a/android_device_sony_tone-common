@@ -25,7 +25,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter kagura kagura_ds,$(TARGET_DEVICE)),)
+ifeq ($(filter-out kagura kagura_ds,$(TARGET_DEVICE)),)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
