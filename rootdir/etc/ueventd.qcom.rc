@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2015, 2017, The Linux Foundation. All rights reserved.
+# Copyright (C) 2013 Sony Mobile Communications Inc.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -194,8 +195,8 @@
 /dev/avtimer              0660   system     audio
 
 # DVB devices
-/dev/dvb/adapter0/demux*  0440   media       media
-/dev/dvb/adapter0/dvr*    0660   media       media
+/dev/dvb/adapter0/demux*  0660   system     system
+/dev/dvb/adapter0/dvr*    0660   system     system
 /dev/dvb/adapter0/video*  0660   media       media
 
 # Broadcast devices
@@ -251,15 +252,21 @@
 # wigig
 /sys/bus/pci/drivers/wil6210* 0000:01:00.0/wil6210/fst_link_loss 0660 wifi wifi
 /sys/bus/pci/drivers/wil6210* 0000:01:00.0/wil6210/thermal_throttling 0660 system system
-/sys/bus/pci/drivers/wil6210* 0000:01:00.0/wil6210/snr_thresh 0660 wifi wifi
 /sys/bus/pci/drivers/wil6210* 0000:01:00.0/net/wigig0/queues/rx-0/rps_cpus 0660 system system
 /sys/bus/pci/drivers/wil6210* 0000:01:00.0/net/wigig0/gro_flush_timeout 0660 system system
 /sys/devices/virtual/net/bond0 queues/rx-0/rps_cpus 0660 system system
 
 #nfc permissions
-/dev/nfc-nci              0660    nfc         nfc
-/dev/nq-nci               0660    nfc         nfc
-/dev/assd                 0660    nfc         nfc
+#/dev/nfc-nci              0660    nfc         nfc
+#/dev/nq-nci               0660    nfc         nfc
+#/dev/assd                 0660    nfc         nfc
+
+# NFC
+/sys/devices/soc/75b6000.i2c/i2c-8/8-0028  init_deinit 0200    nfc     nfc
+/sys/devices/soc/75b6000.i2c/i2c-8/8-0028  set_pwr     0200    nfc     nfc
+/sys/devices/soc/75b6000.i2c/i2c-8/8-0028  res_ready   0400    nfc     nfc
+/sys/devices/soc/75b6000.i2c/i2c-8/8-0028  recv_rsp    0600    nfc     nfc
+/sys/devices/soc/75b6000.i2c/i2c-8/8-0028  send_cmd    0200    nfc     nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
@@ -282,16 +289,21 @@
 /dev/hbtp_input           0660   system     system
 /dev/hbtp_vm              0660   system     system
 
-# Add device block for FRP
-/dev/block/platform/soc/7824900.sdhci/by-name/config    0600   system     system
-/dev/block/platform/soc/7464900.sdhci/by-name/frp       0600   system     system
-/dev/block/platform/soc/624000.ufshc/by-name/frp        0600   system     system
-/dev/block/platform/soc/1da4000.ufshc/by-name/frp       0600   system     system
-/dev/block/platform/soc/c0c4000.sdhci/by-name/frp       0600   system     system
-/dev/block/platform/soc/1d84000.ufshc/by-name/frp       0600   system     system
-
-# Add device block for FRP with soc.0
-/dev/block/platform/soc.0/7824900.sdhci/by-name/config    0600   system     system
-
 # Kmsg device
 /dev/kmsg                                               0620   root       system
+
+# Fingerprint sensor  device
+/sys/devices/soc/soc:fpc1145 hw_reset         0220 system input
+/sys/devices/soc/soc:fpc1145 pinctl_set       0220 system input
+/sys/devices/soc/soc:fpc1145 regulator_enable 0220 system input
+/sys/devices/soc/soc:fpc1145 spi_prepare      0220 system input
+/sys/devices/soc/soc:fpc1145 irq              0660 system input
+/sys/devices/soc/soc:fpc1145 wakeup_enable    0220 system input
+
+# Audio Sony Effect tuning parameter setting device
+/dev/sony_hweffect_params 0660  system      audio
+
+/dev/block/bootdevice/by-name/frp 0600  system      system
+
+# TA
+/dev/block/bootdevice/by-name/TA 0770  tad     tad
