@@ -37,18 +37,18 @@ mkdir /v
 mount -t ext4 -o ro "$syspath" /v
 
 # dependencies from odm
-cp /o/lib64/libdiag.so /sbin/
-cp /o/lib64/libdrmfs.so /sbin/
-cp /o/lib64/libdrmtime.so /sbin/
-cp /o/lib64/libqisl.so /sbin/
-cp /o/lib64/libQSEEComAPI.so /sbin/
-cp /o/lib64/librpmb.so /sbin/
-cp /o/lib64/libssd.so /sbin/
-cp /o/lib64/libtime_genoff.so /sbin/
-cp /o/lib64/libkeymasterdeviceutils.so /sbin/
-cp /o/lib64/libkeymasterprovision.so /sbin/
-cp /o/lib64/libkeymasterutils.so /sbin/
-cp /o/lib64/libqtikeymaster4.so /sbin/
+cp /system/vendor/lib64/libdiag.so /sbin/
+cp /system/vendor/lib64/libdrmfs.so /sbin/
+cp /system/vendor/lib64/libdrmtime.so /sbin/
+cp /system/vendor/lib64/libqisl.so /sbin/
+cp /system/vendor/lib64/libQSEEComAPI.so /sbin/
+cp /system/vendor/lib64/librpmb.so /sbin/
+cp /system/vendor/lib64/libssd.so /sbin/
+cp /system/vendor/lib64/libtime_genoff.so /sbin/
+cp /system/vendor/lib64/libkeymasterdeviceutils.so /sbin/
+cp /system/vendor/lib64/libkeymasterprovision.so /sbin/
+cp /system/vendor/lib64/libkeymasterutils.so /sbin/
+cp /system/vendor/lib64/libqtikeymaster4.so /sbin/
 
 # dependencies from system
 cp /s/system/lib64/android.hardware.boot@1.0.so /sbin/
