@@ -20,30 +20,14 @@
 set -e
 
 
-OUTFD=1
-readlink /proc/$$/fd/$OUTFD 2>/dev/null | grep /tmp >/dev/null
-if [ "$?" -eq "0" ]; then
-  # rerouted to log file, we don't want our ui_print commands going there
-  OUTFD=0
-
-  # we are probably running in embedded mode, see if we can find the right fd
-  # we know the fd is a pipe and that the parent updater may have been started as
-  # 'update-binary 3 fd zipfile'
-  for FD in `ls /proc/$$/fd`; do
-    readlink /proc/$$/fd/$FD 2>/dev/null | grep pipe >/dev/null
-    if [ "$?" -eq "0" ]; then
-      ps | grep " 3 $FD " | grep -v grep >/dev/null
-      if [ "$?" -eq "0" ]; then
-        OUTFD=$FD
-        break
-      fi
-    fi
-  done
-fi
+OUTFD=$( xargs -0 < /proc/${PPID}/cmdline | awk '{print $3}' ) 2>/dev/null
 
 ui_print() {
-  echo -n -e "ui_print $1\n" >> /proc/self/fd/$OUTFD
-  echo -n -e "ui_print\n" >> /proc/self/fd/$OUTFD
+    if [ "${OUTFD}" != "" ]; then
+        echo -e "ui_print ${1} " 1>&/proc/self/fd/$OUTFD;
+    else
+        echo -e "${1}";
+    fi;
 }
 
 # check mounts
@@ -66,10 +50,10 @@ check_mount() {
 
 # check partitions
 check_mount /lta-label /dev/block/bootdevice/by-name/LTALabel ext4;
-check_mount /system /dev/block/bootdevice/by-name/system ext4;
+check_mount /oem /dev/block/bootdevice/by-name/oem ext4;
 
 setvariant=$(\
-    cat /system/vendor/build.prop | \
+    cat /oem/build.prop | \
     grep ro.sony.variant | \
     sed s/.*=// \
 );
@@ -92,7 +76,7 @@ if [[ "$setvariant" == "$variant" ]]
 then
     ui_print "Variant already set!"
 else
-    $(echo "ro.sony.variant=${variant}" >> /system/vendor/build.prop);
-    chmod 0644 /system/vendor/build.prop;
+    $(echo "ro.sony.variant=${variant}" >> /oem/build.prop);
+    chmod 0644 /oem/build.prop;
 fi
 exit 0
