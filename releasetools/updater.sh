@@ -19,17 +19,6 @@
 
 set -e
 
-
-OUTFD=$( xargs -0 < /proc/${PPID}/cmdline | awk '{print $3}' ) 2>/dev/null
-
-ui_print() {
-    if [ "${OUTFD}" != "" ]; then
-        echo -e "ui_print ${1} " 1>&/proc/self/fd/$OUTFD;
-    else
-        echo -e "${1}";
-    fi;
-}
-
 # check mounts
 check_mount() {
     local MOUNT_POINT=$(readlink "${1}");
@@ -69,12 +58,11 @@ variant=$(\
     tr '[a-z]' '[A-Z]' \
 );
 
-ui_print "Device variant: ${variant}";
 
 # Set the variant as a prop
 if [[ "$setvariant" == "$variant" ]]
 then
-    ui_print "Variant already set!"
+    echo "Variant already set!";
 else
     $(echo "ro.sony.variant=${variant}" >> /oem/build.prop);
     chmod 0644 /oem/build.prop;
