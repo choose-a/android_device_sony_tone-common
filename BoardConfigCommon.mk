@@ -194,21 +194,14 @@ BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 # Variant
 TARGET_INIT_VENDOR_LIB := libinit_variant
 
-# Wifi
-BOARD_HAS_QCOM_WLAN := true
-BOARD_HAS_QCOM_WLAN_SDK := true
-BOARD_WLAN_DEVICE := qcwcn
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+# Wi-Fi definitions for Broadcom solution
+BOARD_WLAN_DEVICE           := bcmdhd
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
-WIFI_DRIVER_BUILT := qca_cld3
-WIFI_DRIVER_FW_PATH_AP := "ap"
-WIFI_DRIVER_FW_PATH_STA := "sta"
-WIFI_DRIVER_FW_PATH_P2P := "p2p"
-WIFI_DRIVER_OPERSTATE_PATH := "/sys/class/net/wlan0/operstate"
-WIFI_DRIVER_STATE_CTRL_PARAM := "/sys/kernel/boot_wlan/boot_wlan"
-WIFI_DRIVER_STATE_ON := 1
-WIFI_DRIVER_STATE_OFF := 0
-WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
-WPA_SUPPLICANT_VERSION := VER_0_8_X
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER        := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_bcmdhd
+# define firmware paths if not using brcmfmac driver
+WIFI_DRIVER_FW_PATH_PARAM   := "/sys/module/bcmdhd/parameters/firmware_path"
+WIFI_DRIVER_FW_PATH_AP      := "/system/etc/firmware/wlan/bcmdhd/fw_bcmdhd_apsta.bin"
+WIFI_DRIVER_FW_PATH_STA     := "/system/etc/firmware/wlan/bcmdhd/fw_bcmdhd.bin"
