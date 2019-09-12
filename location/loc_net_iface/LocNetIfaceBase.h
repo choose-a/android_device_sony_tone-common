@@ -28,14 +28,14 @@
 #ifndef LOC_NET_IFACE_BASE_H
 #define LOC_NET_IFACE_BASE_H
 
-#include <IDataItemCore.h>
+#include <IDataItem.h>
 #include <loc_gps.h>
 #include <algorithm>
 #include <vector>
 #include <list>
 #include <string.h>
 
-using namespace loc_core;
+using namespace izat_manager;
 
 /* Connectivity Type Enum
  *
@@ -69,16 +69,6 @@ typedef enum {
     LOC_NET_WWAN_CALL_EVT_MAX
 } LocNetWwanCallEvent;
 
-/* Connectivity State */
-typedef enum {
-    LOC_NET_CONN_STATE_INVALID = 0,
-    LOC_NET_CONN_STATE_ENABLED,
-    LOC_NET_CONN_STATE_DISABLED,
-    LOC_NET_CONN_STATE_CONNECTED,
-    LOC_NET_CONN_STATE_DISCONNECTED,
-    LOC_NET_CONN_STATE_MAX
-} LocNetConnState;
-
 /* WWAN call status callback
  * apn and apnIpType values are valid based on event. */
 typedef void (*LocWwanCallStatusCb)(
@@ -87,7 +77,7 @@ typedef void (*LocWwanCallStatusCb)(
 
 /* DataItem Notification callback */
 typedef void (*LocNetStatusChangeCb)(
-        void* userDataPtr, std::list<IDataItemCore*>& itemList);
+        void* userDataPtr, std::list<IDataItem*>& itemList);
 
 /* Maximum length of APN Name config items */
 #define APN_NAME_MAX_LEN 255

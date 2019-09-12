@@ -28,8 +28,7 @@
 #define LOG_TAG "LocSvc_LocNetIfaceBase"
 
 #include <LocNetIfaceBase.h>
-#include <loc_pla.h>
-#include <log_util.h>
+#include <platform_lib_log_util.h>
 #include <loc_cfg.h>
 
 /* Data Item notify callback

@@ -30,19 +30,19 @@
 #include "LocNetIface.h"
 #include <QCMAP_Client.h>
 #include "qualcomm_mobile_access_point_msgr_v01.h"
-#include <loc_pla.h>
+#include <platform_lib_log_util.h>
 #include "DataItemConcreteTypes.h"
 #include <loc_cfg.h>
-#include <log_util.h>
+#include <platform_lib_macros.h>
 #include <unistd.h>
 
-using namespace izat_manager;
 
 /* LocNetIface singleton instance
  * Used for QCMAP registration */
 LocNetIface* LocNetIface::sLocNetIfaceInstance = NULL;
 
-void LocNetIface::subscribe(
+
+void LocNetIface::subscribe (
         const std::list<DataItemId>& itemListToSubscribe) {
 
     ENTRY_LOG();
@@ -56,18 +56,18 @@ void LocNetIface::subscribe(
     if (anyUpdatesToSubscriptionList) {
         if (isItemSubscribed(NETWORKINFO_DATA_ITEM_ID)) {
             subscribeWithQcmap();
-            notifyCurrentNetworkInfo(true);
+            notifyCurrentNetworkInfo();
         }
         if (isItemSubscribed(WIFIHARDWARESTATE_DATA_ITEM_ID)) {
             subscribeWithQcmap();
-            notifyCurrentWifiHardwareState(true);
+            notifyCurrentWifiHardwareState();
         }
     }
 
     EXIT_LOG_WITH_ERROR("%d", 0);
 }
 
-void LocNetIface::unsubscribe(
+void LocNetIface::unsubscribe (
         const std::list<DataItemId>& itemListToUnsubscribe) {
 
     ENTRY_LOG();
@@ -86,7 +86,7 @@ void LocNetIface::unsubscribe(
     }
 }
 
-void LocNetIface::unsubscribeAll() {
+void LocNetIface::unsubscribeAll () {
 
     ENTRY_LOG();
 
@@ -101,7 +101,7 @@ void LocNetIface::unsubscribeAll() {
     mSubscribedItemList.clear();
 }
 
-void LocNetIface::requestData(
+void LocNetIface::requestData (
         const std::list<DataItemId>& itemListToRequestData) {
 
     ENTRY_LOG();
@@ -110,7 +110,7 @@ void LocNetIface::requestData(
      * We don't support any data item to fetch data for */
 }
 
-void LocNetIface::subscribeWithQcmap() {
+void LocNetIface::subscribeWithQcmap () {
 
     ENTRY_LOG();
 
@@ -155,7 +155,7 @@ void LocNetIface::subscribeWithQcmap() {
     }
 }
 
-void LocNetIface::unsubscribeWithQcmap() {
+void LocNetIface::unsubscribeWithQcmap () {
 
     ENTRY_LOG();
 
@@ -169,7 +169,7 @@ void LocNetIface::unsubscribeWithQcmap() {
     mQcmapClientPtr = NULL;
 }
 
-void LocNetIface::qcmapClientCallback(
+void LocNetIface::qcmapClientCallback (
         qmi_client_type user_handle, /**< QMI user handle. */
         unsigned int msg_id, /**< Indicator message ID. */
         void *ind_buf, /**< Raw indication data. */
@@ -177,8 +177,6 @@ void LocNetIface::qcmapClientCallback(
         void *ind_cb_data /**< User callback handle. */ ) {
 
     ENTRY_LOG();
-    lock_guard<recursive_mutex> guard(
-            LocNetIface::sLocNetIfaceInstance->getMutex());
 
     qmi_client_error_type qmi_error;
 
@@ -287,7 +285,7 @@ void LocNetIface::qcmapClientCallback(
     }
 }
 
-void LocNetIface::handleQcmapCallback(
+void LocNetIface::handleQcmapCallback (
         qcmap_msgr_wlan_status_ind_msg_v01 &wlanStatusIndData) {
 
     ENTRY_LOG();
@@ -300,18 +298,14 @@ void LocNetIface::handleQcmapCallback(
 
     /* Notify observers */
     if (wlanStatusIndData.wlan_status == QCMAP_MSGR_WLAN_ENABLED_V01) {
-        if (mLocNetWlanState == LOC_NET_CONN_STATE_DISABLED) {
-            mLocNetWlanState = LOC_NET_CONN_STATE_ENABLED;
-        }
         notifyObserverForWlanStatus(true);
     } else if (wlanStatusIndData.wlan_status == QCMAP_MSGR_WLAN_DISABLED_V01) {
-        mLocNetWlanState = LOC_NET_CONN_STATE_DISABLED;
         notifyObserverForWlanStatus(false);
     } else {
         LOC_LOGE("Invalid wlan status %d", wlanStatusIndData.wlan_status);
     }
 }
-void LocNetIface::handleQcmapCallback(
+void LocNetIface::handleQcmapCallback (
         qcmap_msgr_station_mode_status_ind_msg_v01 &stationModeIndData){
 
     ENTRY_LOG();
@@ -321,18 +315,16 @@ void LocNetIface::handleQcmapCallback(
     /* Notify observers */
     if (stationModeIndData.station_mode_status ==
             QCMAP_MSGR_STATION_MODE_CONNECTED_V01) {
-        mLocNetWlanState = LOC_NET_CONN_STATE_CONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WLAN);
+        notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WLAN);
     } else if (stationModeIndData.station_mode_status ==
                 QCMAP_MSGR_STATION_MODE_DISCONNECTED_V01) {
-        mLocNetWlanState = LOC_NET_CONN_STATE_DISCONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WLAN);
+        notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WLAN);
     } else {
-        LOC_LOGE("Unsupported station mode status %d",
+        LOC_LOGE("Unhandled station mode status %d",
                     stationModeIndData.station_mode_status);
     }
 }
-void LocNetIface::handleQcmapCallback(
+void LocNetIface::handleQcmapCallback (
         qcmap_msgr_wwan_status_ind_msg_v01 &wwanStatusIndData) {
 
     ENTRY_LOG();
@@ -343,18 +335,16 @@ void LocNetIface::handleQcmapCallback(
     /* Notify observers */
     if (wwanStatusIndData.wwan_status ==
             QCMAP_MSGR_WWAN_STATUS_CONNECTED_V01) {
-        mLocNetWwanState = LOC_NET_CONN_STATE_CONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
+        notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WWAN_INTERNET);
     } else if (wwanStatusIndData.wwan_status ==
             QCMAP_MSGR_WWAN_STATUS_DISCONNECTED_V01) {
-        mLocNetWwanState = LOC_NET_CONN_STATE_DISCONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
+        notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
     } else {
         LOC_LOGW("Unsupported wwan status %d",
                 wwanStatusIndData.wwan_status);
     }
 }
-void LocNetIface::handleQcmapCallback(
+void LocNetIface::handleQcmapCallback (
         qcmap_msgr_bring_up_wwan_ind_msg_v01 &bringUpWwanIndData) {
 
     ENTRY_LOG();
@@ -366,8 +356,7 @@ void LocNetIface::handleQcmapCallback(
     if (bringUpWwanIndData.conn_status ==
             QCMAP_MSGR_WWAN_STATUS_CONNECTED_V01) {
 
-        mLocNetWwanState = LOC_NET_CONN_STATE_CONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
+        notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WWAN_INTERNET);
 
         if (mIsConnectBackhaulPending &&
                 mWwanCallStatusCb != NULL){
@@ -408,8 +397,7 @@ void LocNetIface::handleQcmapCallback(
     if (teardownWwanIndData.conn_status ==
             QCMAP_MSGR_WWAN_STATUS_DISCONNECTED_V01) {
 
-        mLocNetWwanState = LOC_NET_CONN_STATE_DISCONNECTED;
-        notifyCurrentNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
+        notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
 
         if (mIsDisconnectBackhaulPending &&
                 mWwanCallStatusCb != NULL) {
@@ -438,7 +426,7 @@ void LocNetIface::handleQcmapCallback(
     }
 }
 
-void LocNetIface::notifyCurrentNetworkInfo(bool queryQcmap, LocNetConnType connType) {
+void LocNetIface::notifyCurrentNetworkInfo () {
 
     ENTRY_LOG();
 
@@ -448,35 +436,22 @@ void LocNetIface::notifyCurrentNetworkInfo(bool queryQcmap, LocNetConnType connT
         return;
     }
 
-    /* Check saved state if queryQcmap disabled */
-    if (!queryQcmap) {
-        if (mLocNetWlanState == LOC_NET_CONN_STATE_CONNECTED) {
-            notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WLAN);
-        } else if (mLocNetWwanState == LOC_NET_CONN_STATE_CONNECTED) {
-            notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WWAN_INTERNET);
-        } else {
-            notifyObserverForNetworkInfo(false, connType);
-        }
-        return;
+    /* Fetch station mode status and notify observers */
+    if (isWlanConnected()) {
+        notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WLAN);
+    } else {
+        notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WLAN);
     }
 
-    /* Fetch connectivity status from qcmap and notify observers */
-    if (isWlanConnected()) {
-        mLocNetWlanState = LOC_NET_CONN_STATE_CONNECTED;
-        notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WLAN);
-    } else if (isWwanConnected()) {
-        mLocNetWwanState = LOC_NET_CONN_STATE_CONNECTED;
+    /* Fetch WWAN status and notify observers */
+    if (isWwanConnected()) {
         notifyObserverForNetworkInfo(true, LOC_NET_CONN_TYPE_WWAN_INTERNET);
     } else {
-        mLocNetWlanState = LOC_NET_CONN_STATE_DISCONNECTED;
-        mLocNetWwanState = LOC_NET_CONN_STATE_DISCONNECTED;
-        // notify observer for both wifi and wwan
-        notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WLAN);
         notifyObserverForNetworkInfo(false, LOC_NET_CONN_TYPE_WWAN_INTERNET);
     }
 }
 
-void LocNetIface::notifyCurrentWifiHardwareState(bool queryQcmap) {
+void LocNetIface::notifyCurrentWifiHardwareState () {
 
     ENTRY_LOG();
 
@@ -484,26 +459,6 @@ void LocNetIface::notifyCurrentWifiHardwareState(bool queryQcmap) {
     if (mQcmapClientPtr == NULL) {
         LOC_LOGE("No QCMAP instance !");
         return;
-    }
-
-    /* Check saved state if queryQcmap disabled */
-    if (!queryQcmap) {
-        if (mLocNetWlanState == LOC_NET_CONN_STATE_ENABLED ||
-                mLocNetWlanState == LOC_NET_CONN_STATE_CONNECTED ||
-                mLocNetWlanState == LOC_NET_CONN_STATE_DISCONNECTED) {
-            notifyObserverForWlanStatus(true);
-        } else if (mLocNetWlanState == LOC_NET_CONN_STATE_DISABLED) {
-            notifyObserverForWlanStatus(false);
-        } else {
-            LOC_LOGE("Invalid WLAN state: %d", mLocNetWlanState);
-        }
-        return;
-    }
-
-    /* Access QCMAP instance only from the static instance */
-    if (this != LocNetIface::sLocNetIfaceInstance &&
-            LocNetIface::sLocNetIfaceInstance != NULL) {
-        LocNetIface::sLocNetIfaceInstance->notifyCurrentWifiHardwareState(queryQcmap);
     }
 
     /* Fetch WLAN status */
@@ -517,7 +472,6 @@ void LocNetIface::notifyCurrentWifiHardwareState(bool queryQcmap) {
     }
 
     if (wlan_mode == QCMAP_MSGR_WLAN_MODE_ENUM_MIN_ENUM_VAL_V01) {
-        mLocNetWlanState = LOC_NET_CONN_STATE_DISABLED;
         notifyObserverForWlanStatus(false);
     } else if (wlan_mode == QCMAP_MSGR_WLAN_MODE_STA_ONLY_V01 ||
             wlan_mode == QCMAP_MSGR_WLAN_MODE_AP_STA_V01 ||
@@ -525,14 +479,12 @@ void LocNetIface::notifyCurrentWifiHardwareState(bool queryQcmap) {
             wlan_mode == QCMAP_MSGR_WLAN_MODE_AP_STA_BRIDGE_V01 ||
             wlan_mode == QCMAP_MSGR_WLAN_MODE_AP_AP_STA_BRIDGE_V01 ||
             wlan_mode == QCMAP_MSGR_WLAN_MODE_STA_ONLY_BRIDGE_V01) {
-        if (mLocNetWlanState == LOC_NET_CONN_STATE_DISABLED) {
-            mLocNetWlanState = LOC_NET_CONN_STATE_ENABLED;
-        }
+        LOC_LOGD("notifying abt WLAN mode: %d", wlan_mode);
         notifyObserverForWlanStatus(true);
     }
 }
 
-void LocNetIface::notifyObserverForWlanStatus(bool isWlanEnabled) {
+void LocNetIface::notifyObserverForWlanStatus (bool isWlanEnabled) {
 
     ENTRY_LOG();
 
@@ -544,13 +496,13 @@ void LocNetIface::notifyObserverForWlanStatus(bool isWlanEnabled) {
 
     /* Create a wifi hardware status item */
     WifiHardwareStateDataItem wifiStateDataItem;
-    IDataItemCore *dataItem = NULL;
+    IDataItem *dataItem = NULL;
 
     wifiStateDataItem.mEnabled = isWlanEnabled;
     dataItem = &wifiStateDataItem;
 
     // Create a list and push data item, since that's what observer expects
-    std::list<IDataItemCore *> dataItemList;
+    std::list<IDataItem *> dataItemList;
     dataItemList.push_back(dataItem);
 
     /* Notify back to client */
@@ -558,7 +510,7 @@ void LocNetIface::notifyObserverForWlanStatus(bool isWlanEnabled) {
             LocNetIfaceBase::sNotifyCbUserDataPtr, dataItemList);
 }
 
-void LocNetIface::notifyObserverForNetworkInfo(
+void LocNetIface::notifyObserverForNetworkInfo (
         boolean isConnected, LocNetConnType connType){
 
     ENTRY_LOG();
@@ -571,16 +523,15 @@ void LocNetIface::notifyObserverForNetworkInfo(
 
     // Create a network data item
     NetworkInfoDataItem networkInfoDataItem;
-    IDataItemCore *dataItem = NULL;
+    IDataItem *dataItem = NULL;
 
     networkInfoDataItem.mType = (int32)connType;
-    networkInfoDataItem.mAvailable = isConnected;
     networkInfoDataItem.mConnected = isConnected;
 
     dataItem = &networkInfoDataItem;
 
     // Create a list and push data item, since that's what observer expects
-    std::list<IDataItemCore *> dataItemList;
+    std::list<IDataItem *> dataItemList;
     dataItemList.push_back(dataItem);
 
     /* Notify back to client */
@@ -588,7 +539,7 @@ void LocNetIface::notifyObserverForNetworkInfo(
             LocNetIfaceBase::sNotifyCbUserDataPtr, dataItemList);
 }
 
-bool LocNetIface::setupWwanCall() {
+bool LocNetIface::setupWwanCall () {
 
     ENTRY_LOG();
 
@@ -699,7 +650,7 @@ bool LocNetIface::setupWwanCall() {
     return true;
 }
 
-bool LocNetIface::stopWwanCall() {
+bool LocNetIface::stopWwanCall () {
 
     ENTRY_LOG();
 
@@ -740,7 +691,7 @@ bool LocNetIface::stopWwanCall() {
 }
 
 /* Static callback method */
-void LocNetIface::dsiNetEventCallback(
+void LocNetIface::dsiNetEventCallback (
         dsi_hndl_t dsiHandle, void* userDataPtr, dsi_net_evt_t event,
         dsi_evt_payload_t* eventPayloadPtr){
 
@@ -764,7 +715,7 @@ void LocNetIface::dsiNetEventCallback(
     }
 }
 
-void LocNetIface::handleDSCallback(
+void LocNetIface::handleDSCallback (
         dsi_hndl_t dsiHandle, bool isNetConnected){
 
     ENTRY_LOG();
@@ -846,11 +797,9 @@ bool LocNetIface::isWlanConnected() {
     /* Notify observers */
     if (status == QCMAP_MSGR_STATION_MODE_CONNECTED_V01) {
         LOC_LOGV("WLAN is connected.");
-        mLocNetWlanState = LOC_NET_CONN_STATE_CONNECTED;
         return true;
     } else if (status == QCMAP_MSGR_STATION_MODE_DISCONNECTED_V01) {
         LOC_LOGV("WLAN is disconnected.");
-        mLocNetWlanState = LOC_NET_CONN_STATE_DISCONNECTED;
         return false;
     } else {
         LOC_LOGE("Unhandled station mode status %d", status);
@@ -885,11 +834,9 @@ bool LocNetIface::isWwanConnected() {
     }
     if (v4_status == QCMAP_MSGR_WWAN_STATUS_CONNECTED_V01) {
         LOC_LOGV("WWAN is connected.");
-        mLocNetWwanState = LOC_NET_CONN_STATE_CONNECTED;
         return true;
     } else if (v4_status == QCMAP_MSGR_WWAN_STATUS_DISCONNECTED_V01) {
         LOC_LOGV("WWAN is disconnected.");
-        mLocNetWwanState = LOC_NET_CONN_STATE_DISCONNECTED;
         return false;
     } else {
         LOC_LOGE("Unhandled wwan status %d", v4_status);
@@ -901,7 +848,6 @@ bool LocNetIface::isWwanConnected() {
 bool LocNetIface::connectBackhaul() {
 
     ENTRY_LOG();
-    lock_guard<recursive_mutex> guard(mMutex);
 
     /* Access QCMAP instance only from the static instance */
     if (this != LocNetIface::sLocNetIfaceInstance &&
@@ -931,30 +877,22 @@ bool LocNetIface::connectBackhaul() {
         return false;
     }
     if (v4_status == QCMAP_MSGR_WWAN_STATUS_CONNECTING_V01) {
-        LOC_LOGI("Ongoing connection attempt, ignoring connect.");
-        mConnectReqRecvCount++;
+        LOC_LOGI("Connection attempt already ongoing.");
         return true;
     }
     if (v4_status == QCMAP_MSGR_WWAN_STATUS_CONNECTED_V01) {
-        LOC_LOGV("Backhaul already connected, ignoring connect.");
+        LOC_LOGV("Backhaul already connected !");
         if (mWwanCallStatusCb != NULL) {
             mWwanCallStatusCb(
                     mWwanCbUserDataPtr, LOC_NET_WWAN_CALL_EVT_OPEN_SUCCESS,
                     getApnNameFromConfig(), getIpTypeFromConfig());
         }
-        /* Track each connection attempt,
-         * by increasing connect request recvd counter before returning
-         * success. */
-        mConnectReqRecvCount++;
         return true;
     }
 
     /* Check if we've already sent the request */
-    if (mIsConnectBackhaulPending || mIsConnectReqSent) {
-        LOC_LOGI("Ignoring connect, connect pending %d, wwan state %d "
-                "req sent %d", mIsConnectBackhaulPending, mLocNetWwanState,
-                mIsConnectReqSent);
-        mConnectReqRecvCount++;
+    if (mConnectBackhaulSent) {
+        LOC_LOGE("Connect request already sent !");
         return true;
     }
 
@@ -968,21 +906,18 @@ bool LocNetIface::connectBackhaul() {
     }
 
     /* Set the flag to track */
-    mIsConnectReqSent = true;
+    mConnectBackhaulSent = true;
     mIsConnectBackhaulPending = true;
-    mConnectReqRecvCount++;
     return true;
 }
 
 bool LocNetIface::disconnectBackhaul() {
 
     ENTRY_LOG();
-    lock_guard<recursive_mutex> guard(mMutex);
 
     /* Access QCMAP instance only from the static instance */
     if (this != LocNetIface::sLocNetIfaceInstance &&
             LocNetIface::sLocNetIfaceInstance != NULL) {
-        LOC_LOGV("Invoke from static LocNetIface instance..");
         return LocNetIface::sLocNetIfaceInstance->disconnectBackhaul();
     }
 
@@ -993,20 +928,10 @@ bool LocNetIface::disconnectBackhaul() {
         return false;
     }
 
-    /* Track connect requests recvd to multiplexing */
-    if (mConnectReqRecvCount <= 0) {
-        LOC_LOGE("Invalid connect req recv count %d", mConnectReqRecvCount);
-        return false;
-    }
-    mConnectReqRecvCount--;
-
     /* Check if we've sent the request.
-     * If we didn't send the connect request, no need to disconnect.
-     * If we still have surplus connect request count, don't disconnect */
-    if (!mIsConnectReqSent || mConnectReqRecvCount > 0) {
-        LOC_LOGI("Conn req sent %d, conn req rcvd cnt %d, "
-                "ignoring disconnect", mIsConnectReqSent,
-                mConnectReqRecvCount);
+     * If we didn't send the connect request, no need to disconnect */
+    if (!mConnectBackhaulSent) {
+        LOC_LOGE("No connect req from us, ignore disconnect req");
         if (mWwanCallStatusCb != NULL) {
             mWwanCallStatusCb(
                     mWwanCbUserDataPtr, LOC_NET_WWAN_CALL_EVT_CLOSE_SUCCESS,
@@ -1025,7 +950,7 @@ bool LocNetIface::disconnectBackhaul() {
     }
 
     /* Set the flag to track */
-    mIsConnectReqSent = false;
+    mConnectBackhaulSent = false;
     mIsDisconnectBackhaulPending = true;
     return true;
 }

@@ -32,6 +32,7 @@
 #include <sys/un.h>
 #include <errno.h>
 #include <ctype.h>
+#include <unistd.h>
 #include <cutils/properties.h>
 #include <math.h>
 #include <arpa/inet.h>
@@ -45,217 +46,83 @@
 #include <sstream>
 #include <XtraSystemStatusObserver.h>
 #include <LocAdapterBase.h>
-#include <DataItemId.h>
-#include <DataItemsFactoryProxy.h>
-#include <DataItemConcreteTypesBase.h>
 
+using namespace std;
 using namespace loc_core;
 
-#ifdef LOG_TAG
-#undef LOG_TAG
-#endif
-#define LOG_TAG "LocSvc_XSSO"
+#define XTRA_HAL_SOCKET_NAME "/data/vendor/location/xtra/socket_hal_xtra"
 
 bool XtraSystemStatusObserver::updateLockStatus(uint32_t lock) {
-    mGpsLock = lock;
-
-    if (!mReqStatusReceived) {
-        return true;
-    }
-
-    stringstream ss;
+    std::stringstream ss;
     ss <<  "gpslock";
     ss << " " << lock;
-    return ( send(LOC_IPC_XTRA, ss.str()) );
+    ss << "\n"; // append seperator
+    return ( sendEvent(ss) );
 }
 
-bool XtraSystemStatusObserver::updateConnections(uint64_t allConnections) {
-    mIsConnectivityStatusKnown = true;
-    mConnections = allConnections;
-
-    if (!mReqStatusReceived) {
-        return true;
-    }
-
-    stringstream ss;
+bool XtraSystemStatusObserver::updateConnectionStatus(bool connected, uint8_t type) {
+    std::stringstream ss;
     ss <<  "connection";
-    ss << " " << mConnections;
-    return ( send(LOC_IPC_XTRA, ss.str()) );
+    ss << " " << (connected ? "1" : "0");
+    ss << " " << (int)type;
+    ss << "\n"; // append seperator
+    return ( sendEvent(ss) );
 }
 
-bool XtraSystemStatusObserver::updateTac(const string& tac) {
-    mTac = tac;
-
-    if (!mReqStatusReceived) {
-        return true;
+bool XtraSystemStatusObserver::sendEvent(std::stringstream& event) {
+    int socketFd = createSocket();
+    if (socketFd < 0) {
+        LOC_LOGe("XTRA unreachable. sending failed.");
+        return false;
     }
 
-    stringstream ss;
-    ss <<  "tac";
-    ss << " " << tac.c_str();
-    return ( send(LOC_IPC_XTRA, ss.str()) );
-}
+    const std::string& data = event.str();
+    int remain = data.length();
+    ssize_t sent = 0;
 
-bool XtraSystemStatusObserver::updateMccMnc(const string& mccmnc) {
-    mMccmnc = mccmnc;
-
-    if (!mReqStatusReceived) {
-        return true;
+    while (remain > 0 &&
+          (sent = ::send(socketFd, data.c_str() + (data.length() - remain),
+                       remain, MSG_NOSIGNAL)) > 0) {
+        remain -= sent;
     }
 
-    stringstream ss;
-    ss <<  "mncmcc";
-    ss << " " << mccmnc.c_str();
-    return ( send(LOC_IPC_XTRA, ss.str()) );
-}
-
-bool XtraSystemStatusObserver::updateXtraThrottle(const bool enabled) {
-    mXtraThrottle = enabled;
-
-    if (!mReqStatusReceived) {
-        return true;
+    if (sent < 0) {
+        LOC_LOGe("sending error. reason:%s", strerror(errno));
     }
 
-    stringstream ss;
-    ss <<  "xtrathrottle";
-    ss << " " << (enabled ? 1 : 0);
-    return ( send(LOC_IPC_XTRA, ss.str()) );
+    closeSocket(socketFd);
+
+    return (remain == 0);
 }
 
-inline bool XtraSystemStatusObserver::onStatusRequested(int32_t xtraStatusUpdated) {
-    mReqStatusReceived = true;
 
-    if (xtraStatusUpdated) {
-        return true;
-    }
+int XtraSystemStatusObserver::createSocket() {
+    int socketFd = -1;
 
-    stringstream ss;
+    if ((socketFd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0) {
+        LOC_LOGe("create socket error. reason:%s", strerror(errno));
 
-    ss << "respondStatus" << endl;
-    (mGpsLock == -1 ? ss : ss << mGpsLock) << endl << mConnections << endl
-            << mTac << endl << mMccmnc << endl << mIsConnectivityStatusKnown;
+     } else {
+        const char* socketPath = XTRA_HAL_SOCKET_NAME ;
+        struct sockaddr_un addr = { .sun_family = AF_UNIX };
+        snprintf(addr.sun_path, sizeof(addr.sun_path), "%s", socketPath);
 
-    return ( send(LOC_IPC_XTRA, ss.str()) );
-}
-
-void XtraSystemStatusObserver::onReceive(const std::string& data) {
-    if (!strncmp(data.c_str(), "ping", sizeof("ping") - 1)) {
-        LOC_LOGd("ping received");
-
-#ifdef USE_GLIB
-    } else if (!strncmp(data.c_str(), "connectBackhaul", sizeof("connectBackhaul") - 1)) {
-        mSystemStatusObsrvr->connectBackhaul();
-
-    } else if (!strncmp(data.c_str(), "disconnectBackhaul", sizeof("disconnectBackhaul") - 1)) {
-        mSystemStatusObsrvr->disconnectBackhaul();
-#endif
-
-    } else if (!strncmp(data.c_str(), "requestStatus", sizeof("requestStatus") - 1)) {
-        int32_t xtraStatusUpdated = 0;
-        sscanf(data.c_str(), "%*s %d", &xtraStatusUpdated);
-
-        struct HandleStatusRequestMsg : public LocMsg {
-            XtraSystemStatusObserver& mXSSO;
-            int32_t mXtraStatusUpdated;
-            inline HandleStatusRequestMsg(XtraSystemStatusObserver& xsso,
-                    int32_t xtraStatusUpdated) :
-                    mXSSO(xsso), mXtraStatusUpdated(xtraStatusUpdated) {}
-            inline void proc() const override { mXSSO.onStatusRequested(mXtraStatusUpdated); }
-        };
-        mMsgTask->sendMsg(new (nothrow) HandleStatusRequestMsg(*this, xtraStatusUpdated));
-
-    } else {
-        LOC_LOGw("unknown event: %s", data.c_str());
-    }
-}
-
-void XtraSystemStatusObserver::subscribe(bool yes)
-{
-    // Subscription data list
-    list<DataItemId> subItemIdList;
-    subItemIdList.push_back(NETWORKINFO_DATA_ITEM_ID);
-    subItemIdList.push_back(MCCMNC_DATA_ITEM_ID);
-
-    if (yes) {
-        mSystemStatusObsrvr->subscribe(subItemIdList, this);
-
-        list<DataItemId> reqItemIdList;
-        reqItemIdList.push_back(TAC_DATA_ITEM_ID);
-
-        mSystemStatusObsrvr->requestData(reqItemIdList, this);
-
-    } else {
-        mSystemStatusObsrvr->unsubscribe(subItemIdList, this);
-    }
-}
-
-// IDataItemObserver overrides
-void XtraSystemStatusObserver::getName(string& name)
-{
-    name = "XtraSystemStatusObserver";
-}
-
-void XtraSystemStatusObserver::notify(const list<IDataItemCore*>& dlist)
-{
-    struct HandleOsObserverUpdateMsg : public LocMsg {
-        XtraSystemStatusObserver* mXtraSysStatObj;
-        list <IDataItemCore*> mDataItemList;
-
-        inline HandleOsObserverUpdateMsg(XtraSystemStatusObserver* xtraSysStatObs,
-                const list<IDataItemCore*>& dataItemList) :
-                mXtraSysStatObj(xtraSysStatObs) {
-            for (auto eachItem : dataItemList) {
-                IDataItemCore* dataitem = DataItemsFactoryProxy::createNewDataItem(
-                        eachItem->getId());
-                if (NULL == dataitem) {
-                    break;
-                }
-                // Copy the contents of the data item
-                dataitem->copy(eachItem);
-
-                mDataItemList.push_back(dataitem);
+        if (::connect(socketFd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+            LOC_LOGe("cannot connect to XTRA. reason:%s", strerror(errno));
+            if (::close(socketFd)) {
+                LOC_LOGe("close socket error. reason:%s", strerror(errno));
             }
+            socketFd = -1;
         }
+    }
 
-        inline ~HandleOsObserverUpdateMsg() {
-            for (auto each : mDataItemList) {
-                delete each;
-            }
+    return socketFd;
+}
+
+void XtraSystemStatusObserver::closeSocket(const int socketFd) {
+    if (socketFd >= 0) {
+        if(::close(socketFd)) {
+            LOC_LOGe("close socket error. reason:%s", strerror(errno));
         }
-
-        inline void proc() const {
-            for (auto each : mDataItemList) {
-                switch (each->getId())
-                {
-                    case NETWORKINFO_DATA_ITEM_ID:
-                    {
-                        NetworkInfoDataItemBase* networkInfo =
-                                static_cast<NetworkInfoDataItemBase*>(each);
-                        mXtraSysStatObj->updateConnections(networkInfo->getAllTypes());
-                    }
-                    break;
-
-                    case TAC_DATA_ITEM_ID:
-                    {
-                        TacDataItemBase* tac =
-                                 static_cast<TacDataItemBase*>(each);
-                        mXtraSysStatObj->updateTac(tac->mValue);
-                    }
-                    break;
-
-                    case MCCMNC_DATA_ITEM_ID:
-                    {
-                        MccmncDataItemBase* mccmnc =
-                                static_cast<MccmncDataItemBase*>(each);
-                        mXtraSysStatObj->updateMccMnc(mccmnc->mValue);
-                    }
-                    break;
-
-                    default:
-                    break;
-                }
-            }
-        }
-    };
-    mMsgTask->sendMsg(new (nothrow) HandleOsObserverUpdateMsg(this, dlist));
+    }
 }
