@@ -122,6 +122,10 @@ on post-fs
     wait_for_prop sys.listeners.registered true
 
 on post-fs-data
+    # restart qseecomd once we have /data/
+
+    restart qseecomd
+
     mkdir /data/vendor/misc 01771 system system
 
     # Create directory used by display clients
