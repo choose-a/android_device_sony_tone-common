@@ -76,6 +76,10 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
+    # SONY: creat mount point for idd and rca
+    mkdir /idd 0751 oem_2987 oem_2987
+    mkdir /rca 0750 oem_2987 oem_2987
+
     mount_all /vendor/etc/fstab.qcom --early
 
     # Change the compression algorithm for zRAM
