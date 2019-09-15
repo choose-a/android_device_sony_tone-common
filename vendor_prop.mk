@@ -124,4 +124,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-threads=2 \
     dalvik.vm.image-dex2oat-threads=4 \
     persist.timed.enable=true
-
