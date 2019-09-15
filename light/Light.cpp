@@ -39,17 +39,6 @@ static bool isLit(const LightState& state) {
     return (state.color & 0x00ffffff);
 }
 
-static std::string getScaledDutyPcts(int brightness) {
-    std::string buf, pad;
-
-    for (auto i : BRIGHTNESS_RAMP) {
-        buf += pad;
-        buf += std::to_string(i * brightness / 255);
-        pad = ",";
-    }
-
-    return buf;
-}
 }  // anonymous namespace
 
 namespace android {
@@ -60,35 +49,23 @@ namespace implementation {
 
 Light::Light(std::pair<std::ofstream, uint32_t>&& lcd_backlight,
              std::ofstream&& red_led, std::ofstream&& green_led, std::ofstream&& blue_led,
-             std::ofstream&& red_duty_pcts, std::ofstream&& green_duty_pcts, std::ofstream&& blue_duty_pcts,
-             std::ofstream&& red_start_idx, std::ofstream&& green_start_idx, std::ofstream&& blue_start_idx,
              std::ofstream&& red_pause_lo, std::ofstream&& green_pause_lo, std::ofstream&& blue_pause_lo,
              std::ofstream&& red_pause_hi, std::ofstream&& green_pause_hi, std::ofstream&& blue_pause_hi,
-             std::ofstream&& red_ramp_step_ms, std::ofstream&& green_ramp_step_ms, std::ofstream&& blue_ramp_step_ms,
-             std::ofstream&& red_blink, std::ofstream&& green_blink, std::ofstream&& blue_blink,
+             std::ofstream&& red_step_duration, std::ofstream&& green_step_duration, std::ofstream&& blue_step_duration,
              std::ofstream&& rgb_blink)
     : mLcdBacklight(std::move(lcd_backlight)),
       mRedLed(std::move(red_led)),
       mGreenLed(std::move(green_led)),
       mBlueLed(std::move(blue_led)),
-      mRedDutyPcts(std::move(red_duty_pcts)),
-      mGreenDutyPcts(std::move(green_duty_pcts)),
-      mBlueDutyPcts(std::move(blue_duty_pcts)),
-      mRedStartIdx(std::move(red_start_idx)),
-      mGreenStartIdx(std::move(green_start_idx)),
-      mBlueStartIdx(std::move(blue_start_idx)),
       mRedPauseLo(std::move(red_pause_lo)),
       mGreenPauseLo(std::move(green_pause_lo)),
       mBluePauseLo(std::move(blue_pause_lo)),
       mRedPauseHi(std::move(red_pause_hi)),
       mGreenPauseHi(std::move(green_pause_hi)),
       mBluePauseHi(std::move(blue_pause_hi)),
-      mRedRampStepMs(std::move(red_ramp_step_ms)),
-      mGreenRampStepMs(std::move(green_ramp_step_ms)),
-      mBlueRampStepMs(std::move(blue_ramp_step_ms)),
-      mRedBlink(std::move(red_blink)),
-      mGreenBlink(std::move(green_blink)),
-      mBlueBlink(std::move(blue_blink)),
+      mRedRampStepMs(std::move(red_step_duration)),
+      mGreenRampStepMs(std::move(green_step_duration)),
+      mBlueRampStepMs(std::move(blue_step_duration)),
       mRgbBlink(std::move(rgb_blink)) {
     auto attnFn(std::bind(&Light::setAttentionLight, this, std::placeholders::_1));
     auto backlightFn(std::bind(&Light::setLcdBacklight, this, std::placeholders::_1));
@@ -171,9 +148,6 @@ void Light::setSpeakerBatteryLightLocked() {
         mRedLed << 0 << std::endl;
         mGreenLed << 0 << std::endl;
         mBlueLed << 0 << std::endl;
-        mRedBlink << 0 << std::endl;
-        mGreenBlink << 0 << std::endl;
-        mBlueBlink << 0 << std::endl;
     }
 }
 
@@ -223,22 +197,16 @@ void Light::setSpeakerLightLocked(const LightState& state) {
         }
 
         // Red
-        mRedStartIdx << 0 << std::endl;
-        mRedDutyPcts << getScaledDutyPcts(red) << std::endl;
         mRedPauseLo << offMs << std::endl;
         mRedPauseHi << pauseHi << std::endl;
         mRedRampStepMs << stepDuration << std::endl;
 
         // Green
-        mGreenStartIdx << RAMP_SIZE << std::endl;
-        mGreenDutyPcts << getScaledDutyPcts(green) << std::endl;
         mGreenPauseLo << offMs << std::endl;
         mGreenPauseHi << pauseHi << std::endl;
         mGreenRampStepMs << stepDuration << std::endl;
 
         // Blue
-        mBlueStartIdx << RAMP_SIZE * 2 << std::endl;
-        mBlueDutyPcts << getScaledDutyPcts(blue) << std::endl;
         mBluePauseLo << offMs << std::endl;
         mBluePauseHi << pauseHi << std::endl;
         mBlueRampStepMs << stepDuration << std::endl;
@@ -246,11 +214,6 @@ void Light::setSpeakerLightLocked(const LightState& state) {
         // Start the party
         mRgbBlink << 1 << std::endl;
     } else {
-        if (red == 0 && green == 0 && blue == 0) {
-            mRedBlink << 0 << std::endl;
-            mGreenBlink << 0 << std::endl;
-            mBlueBlink << 0 << std::endl;
-        }
         mRedLed << red << std::endl;
         mGreenLed << green << std::endl;
         mBlueLed << blue << std::endl;
