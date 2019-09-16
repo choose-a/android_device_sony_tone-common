@@ -641,10 +641,10 @@ service cnd /vendor/bin/cnd
     user system
     group system wifi inet radio wakelock net_admin
 
-service cnss-daemon /vendor/bin/cnss-daemon -n -l
-    class late_start
-    user system
-    group system inet net_admin wifi
+#service cnss-daemon /vendor/bin/cnss-daemon -n -l
+#    class late_start
+#    user system
+#    group system inet net_admin wifi
 
 on property:sys.powerctl=*
     stop cnss-daemon
