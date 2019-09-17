@@ -388,6 +388,16 @@ on early-boot
 
 on boot
 
+    # Prevent entire system from crashing when a subsystem crashes
+    # venus
+    write /sys/devices/soc/ce0000.qcom,venus/subsys0/restart_level RELATED
+    # adsp
+    write /sys/devices/soc/9300000.qcom,lpass/subsys2/restart_level RELATED
+    # slpi
+    write /sys/devices/soc/1c00000.qcom,ssc/subsys3/restart_level RELATED
+    # modem
+    write /sys/devices/soc/2080000.qcom,mss/subsys4/restart_level RELATED
+
     # Tof sensor
     chown cameraserver camera /dev/i2c-3
     chmod 666 /dev/i2c-3
