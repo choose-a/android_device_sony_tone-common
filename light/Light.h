@@ -33,9 +33,12 @@ namespace implementation {
 struct Light : public ILight {
     Light(std::pair<std::ofstream, uint32_t>&& lcd_backlight,
           std::ofstream&& red_led, std::ofstream&& green_led, std::ofstream&& blue_led,
+          std::ofstream&& red_duty_pcts, std::ofstream&& green_duty_pcts, std::ofstream&& blue_duty_pcts,
+          std::ofstream&& red_start_idx, std::ofstream&& green_start_idx, std::ofstream&& blue_start_idx,
           std::ofstream&& red_pause_lo, std::ofstream&& green_pause_lo, std::ofstream&& blue_pause_lo,
           std::ofstream&& red_pause_hi, std::ofstream&& green_pause_hi, std::ofstream&& blue_pause_hi,
-          std::ofstream&& red_step_duration, std::ofstream&& green_step_duration, std::ofstream&& blue_step_duration,
+          std::ofstream&& red_ramp_step_ms, std::ofstream&& green_ramp_step_ms, std::ofstream&& blue_ramp_step_ms,
+          std::ofstream&& red_blink, std::ofstream&& green_blink, std::ofstream&& blue_blink,
           std::ofstream&& rgb_blink);
 
     // Methods from ::android::hardware::light::V2_0::ILight follow.
@@ -54,6 +57,12 @@ struct Light : public ILight {
     std::ofstream mRedLed;
     std::ofstream mGreenLed;
     std::ofstream mBlueLed;
+    std::ofstream mRedDutyPcts;
+    std::ofstream mGreenDutyPcts;
+    std::ofstream mBlueDutyPcts;
+    std::ofstream mRedStartIdx;
+    std::ofstream mGreenStartIdx;
+    std::ofstream mBlueStartIdx;
     std::ofstream mRedPauseLo;
     std::ofstream mGreenPauseLo;
     std::ofstream mBluePauseLo;
@@ -63,6 +72,9 @@ struct Light : public ILight {
     std::ofstream mRedRampStepMs;
     std::ofstream mGreenRampStepMs;
     std::ofstream mBlueRampStepMs;
+    std::ofstream mRedBlink;
+    std::ofstream mGreenBlink;
+    std::ofstream mBlueBlink;
     std::ofstream mRgbBlink;
 
     LightState mAttentionState;
