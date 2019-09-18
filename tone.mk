@@ -159,7 +159,8 @@ PRODUCT_PACKAGES += \
     libdisplayconfig \
     liboverlay \
     libqdMetaData.system \
-    libtinyxml
+    libtinyxml \
+    libvulkan
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -210,7 +211,11 @@ PRODUCT_PACKAGES += \
 
 # IMS
 PRODUCT_PACKAGES += \
-    ims-ext-common
+    ims-ext-common \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
 
 # Input
 PRODUCT_COPY_FILES += \
