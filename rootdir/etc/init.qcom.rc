@@ -25,6 +25,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import /vendor/etc/init/hw/init.qcom.power.rc
 import /vendor/etc/init/hw/init.usb.rc
 import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
@@ -637,6 +638,13 @@ on property:persist.radio.atfwd.start=false
 on property:radio.atfwd.start=false
     stop atfwd
 
+#start camera server as daemon
+service qcamerasvr vendor/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+    socket cammw_tintless stream 0660 camera camera
+
 service charger /charger
     class charger
     group system graphics
@@ -854,13 +862,6 @@ service ril-daemon2 /vendor/bin/hw/rild -c 2
 
 on property:persist.radio.multisim.config=dsds
     enable ril-daemon2
-
-service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
-    class late_start
-    user root
-    group root system wakelock graphics
-    disabled
-    oneshot
 
 service qcom-sh /vendor/bin/init.qcom.sh
     class late_start

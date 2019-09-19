@@ -133,7 +133,7 @@ PRODUCT_PACKAGES += \
 # Common init scripts
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.qcom.post_boot.sh \
+    init.qcom.power.rc \
     init.qcom.rc \
     init.qcom.sensors.sh \
     init.qcom.sh \
