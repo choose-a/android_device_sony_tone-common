@@ -637,6 +637,13 @@ on property:persist.radio.atfwd.start=false
 on property:radio.atfwd.start=false
     stop atfwd
 
+#start camera server as daemon
+service qcamerasvr vendor/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input graphics
+    socket cammw_tintless stream 0660 camera camera
+
 service charger /charger
     class charger
     group system graphics
