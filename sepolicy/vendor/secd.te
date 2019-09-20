@@ -14,3 +14,5 @@ allow secd tee_device:chr_file rw_file_perms;
 
 # Allow secd to set secd_prop
 set_prop(secd, secd_prop)
+
+allow secd system_data_file:file { getattr open read };

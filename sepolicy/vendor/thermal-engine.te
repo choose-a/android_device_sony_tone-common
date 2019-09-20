@@ -1,1 +1,2 @@
 get_prop(thermal-engine, hwservicemanager_prop)
+allow thermal-engine self:capability dac_override;

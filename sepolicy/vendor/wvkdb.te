@@ -1,0 +1,1 @@
+allow wvkbd tad_socket:sock_file write;
