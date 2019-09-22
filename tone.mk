@@ -138,8 +138,6 @@ PRODUCT_PACKAGES += \
     init.qcom.sensors.sh \
     init.qcom.sh \
     init.qcom.usb.rc \
-    init.usb.rc \
-    init.target.rc \
     init.recovery.qcom.rc \
     ueventd.qcom.rc
 
