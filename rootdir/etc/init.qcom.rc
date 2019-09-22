@@ -125,29 +125,65 @@ on post-fs
     wait_for_prop sys.listeners.registered true
 
     # led RGB
-    chown system system /sys/class/leds/rgb/sync_state
-    chown system system /sys/class/leds/rgb/start_blink
     chown system system /sys/class/leds/led:rgb_red/brightness
-    chown system system /sys/class/leds/led:rgb_red/lut_pwm
-    chown system system /sys/class/leds/led:rgb_red/step_duration
-    chown system system /sys/class/leds/led:rgb_red/pause_lo_multi
-    chown system system /sys/class/leds/led:rgb_red/pause_hi_multi
-    chown system system /sys/class/leds/led:rgb_red/max_single_brightness
-    chown system system /sys/class/leds/led:rgb_red/max_mix_brightness
     chown system system /sys/class/leds/led:rgb_green/brightness
-    chown system system /sys/class/leds/led:rgb_green/lut_pwm
-    chown system system /sys/class/leds/led:rgb_green/step_duration
-    chown system system /sys/class/leds/led:rgb_green/pause_lo_multi
-    chown system system /sys/class/leds/led:rgb_green/pause_hi_multi
-    chown system system /sys/class/leds/led:rgb_green/max_single_brightness
-    chown system system /sys/class/leds/led:rgb_green/max_mix_brightness
     chown system system /sys/class/leds/led:rgb_blue/brightness
-    chown system system /sys/class/leds/led:rgb_blue/lut_pwm
-    chown system system /sys/class/leds/led:rgb_blue/step_duration
-    chown system system /sys/class/leds/led:rgb_blue/pause_lo_multi
-    chown system system /sys/class/leds/led:rgb_blue/pause_hi_multi
-    chown system system /sys/class/leds/led:rgb_blue/max_single_brightness
-    chown system system /sys/class/leds/led:rgb_blue/max_mix_brightness
+
+    chown system system /sys/class/leds/led:rgb_red/pause_lo
+    chown system system /sys/class/leds/led:rgb_green/pause_lo
+    chown system system /sys/class/leds/led:rgb_blue/pause_lo
+
+    chown system system /sys/class/leds/led:rgb_red/pause_hi
+    chown system system /sys/class/leds/led:rgb_green/pause_hi
+    chown system system /sys/class/leds/led:rgb_blue/pause_hi
+
+    chown system system /sys/class/leds/led:rgb_red/blink
+    chown system system /sys/class/leds/led:rgb_green/blink
+    chown system system /sys/class/leds/led:rgb_blue/blink
+
+    chown system system /sys/class/leds/rgb/rgb_blink
+
+    chown system system /sys/class/leds/led:rgb_red/ramp_step_ms
+    chown system system /sys/class/leds/led:rgb_green/ramp_step_ms
+    chown system system /sys/class/leds/led:rgb_blue/ramp_step_ms
+
+    chown system system /sys/class/leds/led:rgb_red/duty_pcts
+    chown system system /sys/class/leds/led:rgb_green/duty_pcts
+    chown system system /sys/class/leds/led:rgb_blue/duty_pcts
+
+    chown system system /sys/class/leds/led:rgb_red/start_idx
+    chown system system /sys/class/leds/led:rgb_green/start_idx
+    chown system system /sys/class/leds/led:rgb_blue/start_idx
+
+    chown system system /sys/class/leds/led:rgb_blue/lut_flags
+    chown system system /sys/class/leds/led:rgb_red/lut_flags
+    chown system system /sys/class/leds/led:rgb_green/lut_flags
+
+    chmod 660 /sys/class/leds/led:rgb_red/brightness
+    chmod 660 /sys/class/leds/led:rgb_green/brightness
+    chmod 660 /sys/class/leds/led:rgb_blue/brightness
+
+    chmod 660 /sys/class/leds/led:rgb_red/ramp_step_ms
+    chmod 660 /sys/class/leds/led:rgb_green/ramp_step_ms
+    chmod 660 /sys/class/leds/led:rgb_blue/ramp_step_ms
+
+    chmod 660 /sys/class/leds/led:rgb_red/duty_pcts
+    chmod 660 /sys/class/leds/led:rgb_green/duty_pcts
+    chmod 660 /sys/class/leds/led:rgb_blue/duty_pcts
+
+    chmod 660 /sys/class/leds/led:rgb_red/start_idx
+    chmod 660 /sys/class/leds/led:rgb_green/start_idx
+    chmod 660 /sys/class/leds/led:rgb_blue/start_idx
+
+    chmod 660 /sys/class/leds/led:rgb_blue/lut_flags
+    chmod 660 /sys/class/leds/led:rgb_red/lut_flags
+    chmod 660 /sys/class/leds/led:rgb_green/lut_flags
+
+    chmod 660 /sys/class/leds/led:rgb_blue/pause_lo
+    chmod 660 /sys/class/leds/led:rgb_red/pause_lo
+    chmod 660 /sys/class/leds/led:rgb_green/pause_lo
+
+    chmod 660 /sys/class/leds/rgb/rgb_blink
 
     # backlight
     chown system system /sys/class/leds/wled/bl_scale
