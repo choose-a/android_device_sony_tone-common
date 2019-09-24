@@ -132,6 +132,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     DEVICE_PROVISIONED=1 \
     rild.libpath=/vendor/lib64/libril-qc-qmi-1.so \
+    vendor.rild.libpath=/vendor/lib64/libril-qc-qmi-1.so \
     ril.subscription.types=NV,RUIM \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.vendor.radio.custom_ecc=1 \
@@ -150,7 +151,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # TimeService
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.timed.enable=true
+    persist.timed.enable=true \
+    persist.delta_time.enable=true
 
 # Wireless display
 PRODUCT_PROPERTY_OVERRIDES += \
