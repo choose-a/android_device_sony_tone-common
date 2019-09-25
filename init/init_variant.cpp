@@ -67,7 +67,6 @@ void property_override(char const prop[], char const value[])
 void vendor_load_properties()
 {
     char model[PROP_VALUE_MAX];
-    char codename[PROP_VALUE_MAX];
 
 #if VARIANT_GSM
     int variantID = -1;
@@ -75,9 +74,6 @@ void vendor_load_properties()
 
     // Get properties
     __system_property_get("ro.sony.variant", model);
-    __system_property_get("ro.choose-a.device", codename);
-    // Set Properties
-    property_override("ro.product.device", codename);
 
 #if VARIANT_GSM
     for (int i = 0; i < (signed)(sizeof(variants)/(sizeof(variants[0]))); i++) {
@@ -100,7 +96,7 @@ void vendor_load_properties()
 	    property_override("ro.build.description",
 			    "kagura_dsds-user 8.0.0 OPR1.170623.026 1 dev-keys");
 	    property_override("ro.bootimage.build.fingerprint",
-			    "Sony/F8332/F8332:8.0.0/41.3.A.2.184/1629897401:user/release-keys");
+			    "Sony/kagura_dsds/kagura_dsds:8.0.0/OPR1.170623.026/1:user/dev-keys");
         } else {
 	    property_override("ro.build.description",
 			    "kagura-user 8.0.0 OPR1.170623.026 1 dev-keys");
