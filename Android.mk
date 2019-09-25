@@ -73,6 +73,15 @@ $(KEYMASTER_IMPL_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(KEYMASTER_IMPL_SYMLINK)
 
+SYSTEM_FIRMWARE_SYMLINK := $(TARGET_OUT)/etc/firmware
+$(SYSTEM_FIRMWARE_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "Creating firmware symlink: $@"
+	@rm -rf $(TARGET_OUT)/etc/firmware
+	$(hide) ln -sf $(TARGET_OUT_VENDOR)/firmware $(TARGET_OUT)/etc/firmware
+
+
+ALL_DEFAULT_INSTALLED_MODULES += $(KEYMASTER_IMPL_SYMLINK)
+
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 endif
