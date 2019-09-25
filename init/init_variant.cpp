@@ -94,7 +94,17 @@ void vendor_load_properties()
             property_set("ro.telephony.ril.config", "simactivation");
             property_override("ro.telephony.default_network", "9,1");
             property_override("ro.product.model", model);
-        }
+	    property_override("ro.semc.product.model", model);
+	    property_override("ro.semc.version.sw", "1302-9162");
+	    property_override("ro.semc.version.sw_variant", "GLOBALDS-LTE3D");
+	    property_override("ro.build.description",
+			    "kagura_dsds-user 8.0.0 OPR1.170623.026 1 dev-keys");
+	    property_override("ro.bootimage.build.fingerprint",
+			    "Sony/F8332/F8332:8.0.0/41.3.A.2.184/1629897401:user/release-keys");
+        } else {
+	    property_override("ro.build.description",
+			    "kagura-user 8.0.0 OPR1.170623.026 1 dev-keys");
+	}
     }
 #endif
 }
