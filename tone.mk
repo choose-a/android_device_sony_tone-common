@@ -374,6 +374,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/fstman.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/fstman.ini \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini
 
+# Variant linking script
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/releasetools/updater.sh:utilities/updater.sh \
+    $(LOCAL_PATH)/releasetools/README:utilities/README
+
 # WiFi Display
 PRODUCT_BOOT_JARS += \
     WfdCommon
