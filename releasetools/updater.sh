@@ -65,6 +65,16 @@ then
     echo "Variant already set!";
 else
     $(echo "ro.sony.variant=${variant}" >> /oem/build.prop);
+    $(echo "persist.multisim.config=dsds" >> /oem/build.prop);
+    $(echo "persist.radio.multisim.config=dsds" >> /oem/build.prop);
+    $(echo "ro.telephony.ril.config=simactivation" >> /oem/build.prop);
+    $(echo "ro.telephony.default_network=9,1" >> /oem/build.prop);
+    $(echo "ro.product.model=XPeria XZ DualSim" >> /oem/build.prop);
+    $(echo "ro.semc.product.model=F8332" >> /oem/build.prop);
+    $(echo "ro.semc.version.sw=1302-9162" >> /oem/build.prop);
+    $(echo "ro.semc.version.sw_variant=GLOBALDS-LTE3D" >> /oem/build.prop);
+    $(echo "ro.build.description=kagura_dsds-user 8.0.0 OPR1.170623.026 1 dev-keys" >> /oem/build.prop);
+    $(echo "ro.bootimage.build.fingerprint=Sony/kagura_dsds/kagura_dsds:8.0.0/OPR1.170623.026/1:user/dev-keys" >> /oem/build.prop);
     chmod 0644 /oem/build.prop;
 fi
 exit 0
