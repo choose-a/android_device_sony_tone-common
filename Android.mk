@@ -77,6 +77,7 @@ SYSTEM_FIRMWARE_SYMLINK := $(TARGET_OUT)/etc/firmware
 $(SYSTEM_FIRMWARE_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@echo "Creating firmware symlink: $@"
 	@rm -rf $(TARGET_OUT_VENDOR)/firmware
+	@mkdir -p $(TARGET_OUT_VENDOR)/firmware
 	$(hide) ln -sf /system/etc/firmware /vendor/firmware
 
 
