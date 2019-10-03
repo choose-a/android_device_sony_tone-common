@@ -360,6 +360,9 @@ PRODUCT_PACKAGES += \
 
 # WiFi
 PRODUCT_PACKAGES += \
+    hostapd \
+    ipacm \
+    IPACM_cfg.xml \
     android.hardware.wifi@1.0-service \
     libwpa_client \
     hostapd \
