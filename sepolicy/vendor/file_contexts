@@ -42,6 +42,7 @@
 /(vendor|system/vendor)/bin/mlog_qmi_service       u:object_r:mlog_qmi_service_exec:s0
 /(vendor|system/vendor)/bin/qns                    u:object_r:qns_exec:s0
 /(vendor|system/vendor)/bin/secd                   u:object_r:secd_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.power@1\.2-service-qti         u:object_r:hal_power_default_exec:s0
 /(vendor|system/vendor)/bin/ta_qmi_service         u:object_r:ta_qmi_service_exec:s0
 /(vendor|system/vendor)/bin/tad_static             u:object_r:tad_exec:s0
 /(vendor|system/vendor)/bin/updatemiscta           u:object_r:updatemiscta_exec:s0
@@ -59,3 +60,7 @@
 
 # Shell scripts
 /(vendor|system/vendor)/bin/init\.qcom\.devstart\.sh    u:object_r:init-qcom-devstart-sh_exec:s0
+
+/sys/kernel/debug/rmt_storage(/.*)?              u:object_r:debugfs_rmt_storage:s0
+/sys/kernel/debug/rpm_stats                      u:object_r:debugfs_rpm:s0
+/sys/kernel/debug/rpm_master_stats               u:object_r:debugfs_rpm:s0
