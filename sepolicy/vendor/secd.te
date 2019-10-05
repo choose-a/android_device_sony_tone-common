@@ -14,3 +14,8 @@ allow secd tee_device:chr_file rw_file_perms;
 
 # Allow secd to set secd_prop
 set_prop(secd, secd_prop)
+
+#TODO fix this
+dontaudit secd_data_file:dir rw_dir_perms;
+dontaudit secd_data_file:file rw_file_perms;
+
