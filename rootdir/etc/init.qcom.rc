@@ -88,7 +88,7 @@ on fs
     wait /dev/block/mmcblk0p1
     chown oem_2997 oem_2997 /dev/block/mmcblk0p1
     chmod 0770 /dev/block/mmcblk0p1
-    start tad_static
+    start tad
 
     # Change the compression algorithm for zRAM
     write /sys/block/zram0/comp_algorithm lz4
@@ -1005,7 +1005,7 @@ service vendor.sensors /vendor/bin/sensors.qcom
     group root
     disabled
 
-service tad /vendor/bin/tad /dev/block/bootdevice/by-name/TA 0,16
+service tad /vendor/bin/tad_static /dev/block/bootdevice/by-name/TA 0,16
     user oem_2997
     group oem_2997 root
     socket tad stream 0660 system oem_2993
