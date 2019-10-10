@@ -562,7 +562,12 @@ on boot
     mkdir /mnt/vendor/persist/bluetooth 0770 bluetooth bluetooth
     mkdir /mnt/vendor/persist/display 0770 system graphics
     mkdir /mnt/vendor/persist/drm 0770 system system
+    mkdir /mnt/vendor/persist/hlos_rfs 0770 vendor_rfs vendor_rfs_shared
+    mkdir /mnt/vendor/persist/hlos_rfs/shared 0770 vendor_rfs vendor_rfs_shared
     mkdir /mnt/vendor/persist/misc 0770 system system
+    mkdir /mnt/vendor/persist/rfs 0770 vendor_rfs vendor_rfs
+    mkdir /mnt/vendor/persist/rfs/msm 0770 vendor_rfs vendor_rfs
+    mkdir /mnt/vendor/persist/rfs/msm/mpss 0770 vendor_rfs vendor_rfs
     mkdir /mnt/vendor/persist/secnvm 0770 system system
     mkdir /mnt/vendor/persist/time 0770 system system
     mkdir /mnt/vendor/persist/vpp 0770 media media
