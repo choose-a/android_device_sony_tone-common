@@ -43,7 +43,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     qcom.bluetooth.soc=rome \
     ro.bluetooth.emb_wp_mode=true \
     ro.bluetooth.wipower=true \
-    ro.bt.bdaddr_path=/data/vendor/bluetooth/bluetooth_bdaddr
+    ro.vendor.bt.bdaddr_path=/data/vendor/bluetooth/bluetooth_bdaddr
 
 ## Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -108,7 +108,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.mm.en.sec.smoothstreaming=false \
     mm.enable.smoothstreaming=false \
     mmp.enable.3g2=true \
-    vidc.enc.dcvs.extra-buff-count=2 \
+    vendor.vidc.enc.dcvs.extra-buff-count=2 \
     vendor.vidc.enc.disable.pq=true
 
 # NFC
