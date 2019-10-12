@@ -6,8 +6,3 @@ genfscon sysfs /kernel/boot_slpi/boot    u:object_r:sysfs_msm_subsys:s0
 
 genfscon debugfs /rmt_storage            u:object_r:debugfs_rmt:s0
 genfscon debugfs /wlan0                  u:object_r:debugfs_wlan:s0
-
-genfscon debugfs /rpmh                                u:object_r:debugfs_rpm:s0
-genfscon debugfs /rpm_stats                           u:object_r:debugfs_rpm:s0
-genfscon debugfs /rpm_master_stats                    u:object_r:debugfs_rpm:s0
-genfscon debugfs /system_stats                        u:object_r:debugfs_rpm:s0
