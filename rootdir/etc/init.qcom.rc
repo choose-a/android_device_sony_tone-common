@@ -318,8 +318,8 @@ on post-fs-data
     # Create directory for hostapd
     mkdir /data/hostapd 0770 system wifi
 
-    # Create /data/time folder for time-services
-    mkdir /data/time 0700 system system
+    # Create /data/vendor/time folder for time-services
+    mkdir /data/vendor/time 0700 system system
 
     mkdir /data/vendor/audio 0770 media audio
 
@@ -905,17 +905,12 @@ on property:init.svc.zygote=running
 on property:init.svc.zygote=restarting
     stop ppd
 
-service ril-daemon2 /vendor/bin/hw/rild -c 2
-    class main
-    socket rild2 stream 660 root radio
-    socket rild-debug2 stream 660 radio system
-    user radio
-    disabled
-    group radio cache inet misc audio sdcard_r sdcard_rw diag oem_2901 log drmrpc oem_2993
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
+on property:persist.radio.multisim.config=ss
+    enable vendor.qcrild
 
 on property:persist.radio.multisim.config=dsds
-    enable ril-daemon2
+    enable vendor.qcrild
+    enable vendor.qcrild2
 
 service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     class late_start
@@ -947,7 +942,7 @@ service qseecomd /vendor/bin/qseecomd
 service vendor.dataqti /vendor/bin/qti
     class main
     user radio
-    group radio net_raw diag usb net_admin
+    group radio oem_2901 diag usb net_admin
     disabled
 
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
