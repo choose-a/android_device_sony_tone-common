@@ -259,17 +259,9 @@ PRODUCT_COPY_FILES += \
 
 # Net
 PRODUCT_PACKAGES += \
-    android.system.net.netd@1.0 \
+    android.system.net.netd@1.1 \
     libandroid_net \
     netutils-wrapper-1.0
-
-# NFC
-PRODUCT_PACKAGES += \
-    android.hardware.nfc@1.1-service \
-    com.android.nfc_extras \
-    NfcNci \
-    SecureElement \
-    Tag
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -316,12 +308,8 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    android.hardware.radio@1.0 \
-    android.hardware.radio@1.1 \
     android.hardware.radio@1.2 \
     android.hardware.radio.config@1.0 \
-    android.hardware.radio.deprecated@1.0 \
-    libprotobuf-cpp-full \
     librmnetctl \
     libxml2
 
@@ -355,10 +343,6 @@ PRODUCT_PACKAGES += \
 # VNDK
 PRODUCT_PACKAGES += \
     vndk-sp
-
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.hardware.gnss@1.0.so:system/lib64/android.hardware.gnss@1.0-v27.so \
-    prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.hardware.gnss@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.gnss@1.0-v27.so
 
 # Vibrator
 PRODUCT_PACKAGES += \
