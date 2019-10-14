@@ -263,6 +263,10 @@ PRODUCT_PACKAGES += \
     libandroid_net \
     netutils-wrapper-1.0
 
+# NFC packages
+PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.1-service
+
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
