@@ -182,6 +182,9 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 # Peripheral manager
 TARGET_PER_MGR_ENABLED := true
 
+# Explicitly disable oem hook
+DISABLE_RILD_OEM_HOOK : true
+
 # Root
 BOARD_ROOT_EXTRA_FOLDERS := idd rca
 BOARD_ROOT_EXTRA_SYMLINKS := \
