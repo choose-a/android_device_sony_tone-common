@@ -177,7 +177,6 @@ TARGET_RECOVERY_FSTAB ?= $(COMMON_PATH)/rootdir/etc/fstab.qcom
 TARGET_USERIMAGES_USE_EXT4 := true
 
 # RIL
-TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 DISABLE_RILD_OEM_HOOK : false
 
 # Peripheral manager
