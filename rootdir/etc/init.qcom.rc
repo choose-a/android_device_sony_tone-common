@@ -62,11 +62,16 @@ on init
     write /dev/stune/foreground/schedtune.colocate 0
     write /dev/stune/top-app/schedtune.colocate 1
 
-    # Setup all the sub-system as related
-    write /sys/bus/msm_subsys/devices/subsys0/restart_level RELATED
-    write /sys/bus/msm_subsys/devices/subsys1/restart_level RELATED
-    write /sys/bus/msm_subsys/devices/subsys2/restart_level RELATED
-    write /sys/bus/msm_subsys/devices/subsys3/restart_level RELATED
+    # Enable subsystem restart
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys4/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys5/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys6/restart_level "RELATED"
+    write /sys/bus/msm_subsys/devices/subsys7/restart_level "RELATED"
 
 on fs
     # Start HW service manager early
