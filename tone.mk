@@ -329,7 +329,6 @@ PRODUCT_PACKAGES += \
 
 # Telephony
 PRODUCT_PACKAGES += \
-    QcRilAm \
     SimDetect
 
 # TextClassifier
