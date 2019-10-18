@@ -193,6 +193,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.sensors.mot_detect=false \
     ro.sony.qf_use_report_period=false
 
+# SSR
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.ssr.restart_level=ALL_ENABLE
+
 # TimeService
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true \
