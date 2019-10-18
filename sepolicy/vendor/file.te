@@ -24,4 +24,7 @@ type startupprober_file, file_type;
 type sysfs_fpc, sysfs_type, fs_type;
 type sysfs_msm_subsys, sysfs_type, fs_type;
 type sysfs_wifi, sysfs_type, fs_type;
+type sysfs_ssr, sysfs_type, fs_type;
+type sysfs_ssr_toggle, sysfs_type, fs_type;
+ssr_crash_reason_file, debugfs_type, fs_type;
 type tad_socket, file_type;
