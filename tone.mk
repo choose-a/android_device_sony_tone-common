@@ -377,8 +377,4 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/releasetools/updater.sh:utilities/updater.sh \
     $(LOCAL_PATH)/releasetools/README:utilities/README
 
-# WiFi Display
-PRODUCT_BOOT_JARS += \
-    WfdCommon
-
 $(call inherit-product, device/sony/tone-common/recovery/twrp.mk)
