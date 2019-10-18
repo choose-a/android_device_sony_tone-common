@@ -681,17 +681,6 @@ service adsprpcd /vendor/bin/adsprpcd
     user media
     group media
 
-service vendor.atfwd /vendor/bin/ATFWD-daemon
-    class late_start
-    user system
-    group system radio
-
-on property:persist.vendor.radio.atfwd.start=false
-    stop vendor.atfwd
-
-on property:vendor.radio.atfwd.start=false
-    stop vendor.atfwd
-
 #start camera server as daemon
 service qcamerasvr vendor/bin/mm-qcamera-daemon
     class late_start
@@ -726,11 +715,6 @@ service devstart_sh /vendor/bin/init.qcom.devstart.sh
     user root
     group root
     oneshot
-
-service dpmQmiMgr /vendor/bin/dpmQmiMgr
-    class main
-    user system
-    group system
 
 service energy-awareness /vendor/bin/energy-awareness
     class main
