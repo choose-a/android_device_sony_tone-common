@@ -220,7 +220,7 @@ user: AID_GPS
 group: AID_GPS
 caps: NET_BIND_SERVICE WAKE_ALARM BLOCK_SUSPEND
 
-[vendor/firmware_mnt/image/*]
+[firmware/image/*]
 mode: 0771
 user: AID_ROOT
 group: AID_SYSTEM
