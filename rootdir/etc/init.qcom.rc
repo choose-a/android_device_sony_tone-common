@@ -32,6 +32,11 @@ import /vendor/etc/init/hw/init.target.rc
 import /vendor/etc/init/hw/init.device.rc
 
 on early-init
+    mkdir /firmware 0771 system system
+    mkdir /bt_firmware 0771 system system
+    symlink /data/tombstones /tombstones
+    mkdir /dsp 0771 media media
+
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
     chown root system /dev/kmsg
@@ -558,21 +563,21 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
-    mkdir /mnt/vendor/persist/alarm 0770 system system
-    mkdir /mnt/vendor/persist/audio 0770 audio audio
-    mkdir /mnt/vendor/persist/bluetooth 0770 bluetooth bluetooth
-    mkdir /mnt/vendor/persist/display 0770 system graphics
-    mkdir /mnt/vendor/persist/drm 0770 system system
-    mkdir /mnt/vendor/persist/hlos_rfs 0770 vendor_rfs vendor_rfs_shared
-    mkdir /mnt/vendor/persist/hlos_rfs/shared 0770 vendor_rfs vendor_rfs_shared
-    mkdir /mnt/vendor/persist/misc 0770 system system
-    mkdir /mnt/vendor/persist/rfs 0770 vendor_rfs vendor_rfs
-    mkdir /mnt/vendor/persist/rfs/msm 0770 vendor_rfs vendor_rfs
-    mkdir /mnt/vendor/persist/rfs/msm/mpss 0770 vendor_rfs vendor_rfs
-    mkdir /mnt/vendor/persist/secnvm 0770 system system
-    mkdir /mnt/vendor/persist/time 0770 system system
-    mkdir /mnt/vendor/persist/vpp 0770 media media
-    restorecon_recursive /mnt/vendor/persist
+    mkdir /persist/alarm 0770 system system
+    mkdir /persist/audio 0770 audio audio
+    mkdir /persist/bluetooth 0770 bluetooth bluetooth
+    mkdir /persist/display 0770 system graphics
+    mkdir /persist/drm 0770 system system
+    mkdir /persist/hlos_rfs 0770 vendor_rfs vendor_rfs_shared
+    mkdir /persist/hlos_rfs/shared 0770 vendor_rfs vendor_rfs_shared
+    mkdir /persist/misc 0770 system system
+    mkdir /persist/rfs 0770 vendor_rfs vendor_rfs
+    mkdir /persist/rfs/msm 0770 vendor_rfs vendor_rfs
+    mkdir /persist/rfs/msm/mpss 0770 vendor_rfs vendor_rfs
+    mkdir /persist/secnvm 0770 system system
+    mkdir /persist/time 0770 system system
+    mkdir /persist/vpp 0770 media media
+    restorecon_recursive /persist
 
     # Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
@@ -604,22 +609,22 @@ on boot
     start vendor.rmt_storage
 
     # Regionalization config and prop files
-    chmod 0644 /mnt/vendor/persist/speccfg/spec
-    chmod 0644 /mnt/vendor/persist/speccfg/devicetype
-    chmod 0644 /mnt/vendor/persist/speccfg/mbnversion
-    chmod 0644 /mnt/vendor/persist/speccfg/.not_triggered
-    chmod 0644 /mnt/vendor/persist/speccfg/vendor_ro.prop
-    chmod 0644 /mnt/vendor/persist/speccfg/vendor_persist.prop
-    chmod 0644 /mnt/vendor/persist/speccfg/submask
-    chmod 0644 /mnt/vendor/persist/speccfg/partition
-    chown system system /mnt/vendor/persist/speccfg/spec
-    chown system system /mnt/vendor/persist/speccfg/devicetype
-    chown system system /mnt/vendor/persist/speccfg/mbnversion
-    chown system system /mnt/vendor/persist/speccfg/.not_triggered
-    chown system system /mnt/vendor/persist/speccfg/vendor_ro.prop
-    chown system system /mnt/vendor/persist/speccfg/vendor_persist.prop
-    chown system system /mnt/vendor/persist/speccfg/submask
-    chown system system /mnt/vendor/persist/speccfg/partition
+    chmod 0644 /persist/speccfg/spec
+    chmod 0644 /persist/speccfg/devicetype
+    chmod 0644 /persist/speccfg/mbnversion
+    chmod 0644 /persist/speccfg/.not_triggered
+    chmod 0644 /persist/speccfg/vendor_ro.prop
+    chmod 0644 /persist/speccfg/vendor_persist.prop
+    chmod 0644 /persist/speccfg/submask
+    chmod 0644 /persist/speccfg/partition
+    chown system system /persist/speccfg/spec
+    chown system system /persist/speccfg/devicetype
+    chown system system /persist/speccfg/mbnversion
+    chown system system /persist/speccfg/.not_triggered
+    chown system system /persist/speccfg/vendor_ro.prop
+    chown system system /persist/speccfg/vendor_persist.prop
+    chown system system /persist/speccfg/submask
+    chown system system /persist/speccfg/partition
 
     # Permissions for egistec
     chown system system /dev/esfp0
