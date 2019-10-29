@@ -101,7 +101,13 @@ caps: NET_BIND_SERVICE
 mode: 0755
 user: AID_GPS
 group: AID_GPS
-caps: NET_BIND_SERVICE BLOCK_SUSPEND
+caps: NET_BIND_SERVICE WAKE_ALARM BLOCK_SUSPEND
+
+[firmware/image/*]
+mode: 0771
+user: AID_ROOT
+group: AID_SYSTEM
+caps: 0
 
 [vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti]
 mode: 0755
