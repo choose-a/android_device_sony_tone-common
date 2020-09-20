@@ -182,6 +182,11 @@ TARGET_RIL_VARIANT := caf
 # Root
 BOARD_ROOT_EXTRA_FOLDERS := bt_firmware dsp firmware idd persist rca
 
+# Use caf hals
+TARGET_QCOM_AUDIO_VARIANT :=msm8996-caf
+TARGET_QCOM_DISPLAY_VARIANT :=msm8996-caf
+TARGET_QCOM_MEDIA_VARIANT :=msm8996-caf
+
 # Security patch level
 VENDOR_SECURITY_PATCH := 2019-05-01
 
